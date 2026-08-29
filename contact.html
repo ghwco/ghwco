@@ -380,7 +380,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   // Replace with the public key from EmailJS \u2192 Account \u2192 General.
-  if (typeof emailjs !== "undefined") { try { emailjs.init({ publicKey: "EMAILJS_PUBLIC_KEY" }); } catch (e) {} }
+  if (typeof emailjs !== "undefined") { try { emailjs.init({ publicKey: "4kZZJo5E8VJGKzGGg" }); } catch (e) {} }
 </script>
 <script src="assets/site.js"></script>
 <script>
@@ -438,10 +438,10 @@
     // not compliance — a BAA-covered inbox is the real fix.
     // ------------------------------------------------------------------
     var CFG = {
-      publicKey:  'EMAILJS_PUBLIC_KEY',
-      serviceId:  'EMAILJS_SERVICE_ID',
-      templateId: 'EMAILJS_TEMPLATE_ID',          // the notification template
-      autoReplyId: 'EMAILJS_AUTOREPLY_TEMPLATE_ID' // optional; '' to skip
+      publicKey:  '4kZZJo5E8VJGKzGGg',
+      serviceId:  'service_0z3erja',
+      templateId: 'template_cbg3w5b',          // the notification template
+      autoReplyId: '' // optional; '' to skip
     };
 
     function done(ok) {
@@ -458,7 +458,7 @@
       }
     }
 
-    if (typeof emailjs === 'undefined' || CFG.publicKey.indexOf('EMAILJS_') === 0) {
+    if (typeof emailjs === 'undefined' || !CFG.publicKey) {
       // Not configured yet — fail loudly in the console rather than showing
       // the visitor a success message for an email that never sent.
       console.error('EmailJS is not configured. Message was NOT sent.');
@@ -486,7 +486,7 @@
         done(true);
         // Auto-reply is best-effort. If it fails the enquiry still arrived,
         // so we never surface that error to the visitor.
-        if (CFG.autoReplyId && CFG.autoReplyId.indexOf('EMAILJS_') !== 0) {
+        if (CFG.autoReplyId) {
           emailjs.send(CFG.serviceId, CFG.autoReplyId, params)
             .catch(function (e) { console.warn('Auto-reply failed:', e); });
         }
