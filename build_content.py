@@ -131,7 +131,7 @@ profile("shayla.html", "Shayla Martinez-O&rsquo;Brien", "LPC &middot; Founder",
    "<strong>What I ask of you.</strong> Honesty about what&rsquo;s actually happening, including the parts you&rsquo;d rather leave out, and a willingness to try things between sessions. Not perfection &mdash; most weeks are partial, and that is still progress.",
    "I founded Golden Hour Wellness Colorado and work as both clinician and business manager. I also co-facilitate <a href=\"mamas-golden-hour.html\">Mama&rsquo;s Golden Hour</a>."],
   True,
-  [("Licence", "LPC (Colorado)"), ("Experience", "11 years"),
+  [("License", "LPC (Colorado)"), ("Experience", "11 years"),
    ("Focus", "Trauma, EMDR, substance use"), ("Sessions", "In person &amp; telehealth")])
 
 profile("chrissie.html", "Chrissie Flynn-Weirich", "LAC &middot; Wellness Facilitator",
@@ -144,19 +144,19 @@ profile("chrissie.html", "Chrissie Flynn-Weirich", "LAC &middot; Wellness Facili
    "<strong>Sessions are telehealth.</strong> That suits a lot of people &mdash; no waiting room, no commute, and it&rsquo;s easier to keep going on the weeks when leaving the house is the hard part. You&rsquo;ll need a private space, and to be physically in Colorado.",
    "I believe in the healing powers of self-reflection, curiosity, self-compassion and connection. Outside of sessions I enjoy baking, reading, music and dance, and my own wellness comes from meditation, yoga and poetry."],
   True,
-  [("Licence", "LAC (Colorado)"), ("Experience", "13+ years"),
+  [("License", "LAC (Colorado)"), ("Experience", "13+ years"),
    ("Focus", "Substance use, anxiety"), ("Sessions", "Telehealth")])
 
 profile("ashley.html", "Ashley LeRossignol", "LPC &middot; Consultant &amp; group facilitator",
   "ashley.jpg", 1103, 1378, [],
   "Ashley co-facilitates Mama&rsquo;s Golden Hour alongside Shayla and consults on clinical practice. She does not take individual clients through Golden Hour Wellness.",
-  ["Working from a solution-oriented framework, Ashley brings over 10 years of experience treating anxiety, depression, relationship challenges, and family and work stressors. She utilizes Cognitive Behavioral Therapy, highlighting the ways mood, thoughts and behaviors shape one another, and emphasising self-compassion along the way.",
+  ["Working from a solution-oriented framework, Ashley brings over 10 years of experience treating anxiety, depression, relationship challenges, and family and work stressors. She utilizes Cognitive Behavioral Therapy, highlighting the ways mood, thoughts and behaviors shape one another, and emphasizing self-compassion along the way.",
    "She received her master&rsquo;s degree in counseling psychology from the University of San Francisco. Outside of therapy you&rsquo;ll find her outdoors, traveling, cooking and exploring new restaurants, places, cultures and communities.",
    "<strong>In the group.</strong> Ashley co-facilitates <a href=\"mamas-golden-hour.html\">Mama&rsquo;s Golden Hour</a> with Shayla. Two facilitators means one can hold the shape of the session while the other follows what is actually happening in the room, which matters a great deal in a group where a lot goes unsaid at first.",
    "<strong>In consultation.</strong> She also meets with the team to think through clinical work. This is a normal part of good practice: it means the reasoning behind your care has been pressure-tested by someone other than the person sitting with you, and it happens without identifying details leaving the room.",
    "<strong>Scheduling note:</strong> individual sessions at Golden Hour Wellness are available with Shayla and Chrissie. Ashley&rsquo;s role here is the group and consultation."],
   False,
-  [("Licence", "LPC"), ("Experience", "10+ years"),
+  [("License", "LPC"), ("Experience", "10+ years"),
    ("Role", "Group &amp; consulting"), ("Individual clients", "Not through this practice")])
 
 print("wrote:", len(OUT), "pages")

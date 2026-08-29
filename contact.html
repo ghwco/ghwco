@@ -164,7 +164,7 @@
         The safeguards below are deliberate:
           1. No field invites clinical detail. "What brings you here" is a
              fixed dropdown of non-diagnostic categories, not free text.
-          2. The message box is capped at 300 characters and labelled with
+          2. The message box is capped at 300 characters and labeled with
              an explicit do-not-include warning — short enough to arrange a
              call, too short to become a history.
           3. An explicit consent checkbox gates submission, so the client
@@ -441,7 +441,7 @@
       publicKey:  '4kZZJo5E8VJGKzGGg',
       serviceId:  'service_0z3erja',
       templateId: 'template_ql76otu',          // the notification template
-      autoReplyId: 'template_tkcx2rd' // sends the confirmation to the enquirer
+      autoReplyId: 'template_tkcx2rd' // sends the confirmation to the inquirer
     };
 
     function done(ok) {
@@ -471,7 +471,11 @@
       from_email:         form.email.value,
       from_phone:         form.phone.value || 'Not given',
       contact_preference: form.interest ? form.interest.value : '',
-      enquiry_type:       form.interest ? form.interest.value : 'General enquiry',
+      inquiry_type:       form.interest ? form.interest.value : 'General inquiry',
+      // The saved EmailJS template still refers to {{enquiry_type}}. Sending
+      // both spellings means the field renders whichever the template uses,
+      // so a copy edit in the dashboard can never silently blank it out.
+      enquiry_type:       form.interest ? form.interest.value : 'General inquiry',
       insurance:          form.insurance.value || 'Not given',
       message:            form.message.value,
       // NOTE: this does NOT control where the notification goes. Routing is
@@ -487,7 +491,7 @@
     emailjs.send(CFG.serviceId, CFG.templateId, params)
       .then(function () {
         done(true);
-        // Auto-reply is best-effort. If it fails the enquiry still arrived,
+        // Auto-reply is best-effort. If it fails the inquiry still arrived,
         // so we never surface that error to the visitor.
         if (CFG.autoReplyId) {
           emailjs.send(CFG.serviceId, CFG.autoReplyId, params)

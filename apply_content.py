@@ -32,7 +32,7 @@ def to_html(value: str) -> str:
     out = value.replace("*", "\x00")          # sentinel survives the split
     parts = out.split("\x00")
     if len(parts) >= 3:
-        # *emphasised* plus any punctuation glued to it stays on one line
+        # *emphasized* plus any punctuation glued to it stays on one line
         out = parts[0] + '<span class="nb"><em>' + parts[1] + "</em>"
         tail = parts[2]
         m = re.match(r"([^\s<]*)(.*)", tail, re.S)

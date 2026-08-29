@@ -75,7 +75,7 @@ makes Thrizer's own page scroll.
 business associate and consumer Gmail carries no BAA, so no PHI should travel
 through it. The safeguards are structural:
 
-- No field invites clinical detail; enquiry type is a fixed non-diagnostic list
+- No field invites clinical detail; inquiry type is a fixed non-diagnostic list
 - Message capped at 300 characters with an explicit do-not-include warning
 - Consent checkbox gates submission; submit is disabled until ticked
 - Honeypot plus a timing check for bots

@@ -46,14 +46,14 @@ emit("privacy.html",
     </div>
 
     <h2>What we collect</h2>
-    <p>If you submit the contact form, we collect the name, email address, phone number, preferred contact method and general enquiry type you provide, plus any message you choose to write.</p>
+    <p>If you submit the contact form, we collect the name, email address, phone number, preferred contact method and general inquiry type you provide, plus any message you choose to write.</p>
     <p>We do not use advertising trackers, and we do not sell or share personal information with third parties for marketing.</p>
 
     <h2>Please don&rsquo;t send health information</h2>
     <p>The contact form is not a secure or encrypted medical channel. Please don&rsquo;t include diagnoses, symptoms, medications or other health details in it. Tell us how to reach you and we&rsquo;ll continue the conversation somewhere private.</p>
 
     <h2>How we use it</h2>
-    <p>Solely to respond to your enquiry and, if you become a client, to arrange care. We keep enquiries only as long as needed for that purpose.</p>
+    <p>Solely to respond to your inquiry and, if you become a client, to arrange care. We keep inquiries only as long as needed for that purpose.</p>
 
     <h2>Third-party services</h2>
     <p>Some parts of this site are provided by third parties, each with its own privacy policy:</p>
@@ -65,7 +65,7 @@ emit("privacy.html",
     <p>Information you enter into those tools is handled under their policies, not this one.</p>
 
     <h2>Your choices</h2>
-    <p>You can ask us what enquiry information we hold about you, and ask us to delete it, by emailing <a href="mailto:goldenhourwellco@gmail.com">goldenhourwellco@gmail.com</a>. Requests relating to treatment records are handled under the HIPAA notice instead.</p>
+    <p>You can ask us what inquiry information we hold about you, and ask us to delete it, by emailing <a href="mailto:goldenhourwellco@gmail.com">goldenhourwellco@gmail.com</a>. Requests relating to treatment records are handled under the HIPAA notice instead.</p>
 
     <h2>Children</h2>
     <p>This site is not directed at children under 13 and we do not knowingly collect their information through it.</p>
@@ -98,7 +98,7 @@ emit("terms.html",
     </div>
 
     <h2>Scheduling and payment</h2>
-    <p>Appointments booked through this site are requests until confirmed. Fees, insurance participation and cancellation terms are set out in your intake paperwork and take precedence over anything summarised here.</p>
+    <p>Appointments booked through this site are requests until confirmed. Fees, insurance participation and cancellation terms are set out in your intake paperwork and take precedence over anything summarized here.</p>
     <p>Insurance is accepted for individual therapy with participating carriers. It is not accepted for Mama&rsquo;s Golden Hour, which is self-pay.</p>
 
     <h2>Licensure and location</h2>

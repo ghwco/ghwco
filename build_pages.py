@@ -143,7 +143,7 @@ PAGE_CSS = '''
 .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:2.5rem}
 @media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:620px){.cards{grid-template-columns:1fr}}
-/* ── Orphan-row centring ─────────────────────────────────────────────
+/* ── Orphan-row centering ─────────────────────────────────────────────
    With 5 cards in a 3-across grid the last row holds 2 and hangs left.
    Switching to a 6-column track and spanning each card 2 columns lets
    the final pair start at column 2 and 4, which centres them under the
@@ -173,7 +173,7 @@ PAGE_CSS = '''
   .grid-3 > *, .cards > *{grid-column:auto}
 }
 
-/* Photo set inside a prose column. Capped and centred so it never towers over
+/* Photo set inside a prose column. Capped and centered so it never towers over
    the text on a phone; height:auto keeps the width/height attributes from
    being read as a CSS presentational hint and stretching the image. */
 .prose figure{margin:2.25rem auto; max-width:38rem}

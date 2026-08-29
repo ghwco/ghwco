@@ -37,7 +37,7 @@ emit("services.html",
 <section class="section" style="background:var(--sand)">
   <div class="wrap prose">
     <h2>Not sure which one you need?</h2>
-    <p>Most people don&rsquo;t arrive with a category in mind, and you don&rsquo;t need one. The pages above are how we organise our training, not a menu you have to order from. In practice these overlap constantly — trauma sits underneath a lot of anxiety, substance use often started as a way to manage something else, and both show up in relationships.</p>
+    <p>Most people don&rsquo;t arrive with a category in mind, and you don&rsquo;t need one. The pages above are how we organize our training, not a menu you have to order from. In practice these overlap constantly — trauma sits underneath a lot of anxiety, substance use often started as a way to manage something else, and both show up in relationships.</p>
     <p>The free consultation exists to sort this out. It takes about fifteen minutes, there&rsquo;s no cost and no obligation, and by the end you&rsquo;ll know whether this practice fits and which clinician makes sense. If we&rsquo;re not the right place, we&rsquo;ll tell you and point you somewhere better.</p>
 
     <h2>What a first session is like</h2>
@@ -47,7 +47,7 @@ emit("services.html",
     <h2>How we work</h2>
     <ul>
       <li><strong>Collaborative, not prescriptive.</strong> You set the pace and the goals. We bring training, structure, and an honest read on whether it&rsquo;s helping.</li>
-      <li><strong>Specialised rather than general.</strong> Each clinician here has a defined lane. We&rsquo;d rather refer you out than practise at the edge of ours.</li>
+      <li><strong>Specialized rather than general.</strong> Each clinician here has a defined lane. We&rsquo;d rather refer you out than practice at the edge of ours.</li>
       <li><strong>Across Colorado.</strong> Telehealth means you don&rsquo;t need to be in Denver, or to drive anywhere on a bad week.</li>
       <li><strong>Straight about cost.</strong> We&rsquo;re in-network with Aetna, United Healthcare and Cigna, and you can have a written <a href="good-faith-estimate.html">Good Faith Estimate</a> before you start.</li>
     </ul>
@@ -60,7 +60,7 @@ def service(slug, name, title, desc, lede, paras, good_fit, practical, who,
     """process: paragraphs for 'What the work looks like'.
        faqs:    (question, answer) pairs — rendered as accordions AND emitted
                 as FAQPage schema, which is what earns the expandable results
-                in Google and gives AI summarisers clean question/answer pairs."""
+                in Google and gives AI summarizers clean question/answer pairs."""
     ld = [{"@context":"https://schema.org","@type":"MedicalTherapy","name":name,
            "url":f"{SITE}/{slug}",
            "provider":{"@type":"MedicalBusiness","name":"Golden Hour Wellness Colorado, LLC",
@@ -116,7 +116,7 @@ service("trauma-emdr.html", "EMDR Therapy", "Trauma &amp; EMDR Therapy",
   "EMDR and trauma-focused therapy in Colorado. Eye Movement Desensitization and Reprocessing with a Licensed Professional Counselor, in person or by telehealth.",
   "Eye Movement Desensitization and Reprocessing alongside other trauma-focused approaches, in person or via telehealth.",
   ["Trauma doesn&rsquo;t only live in memory. It shows up in how your body reacts, how you sleep, what you avoid, and how quickly you move from calm to overwhelmed. EMDR works with that directly rather than asking you to talk your way through it.",
-   "The goal isn&rsquo;t to erase what happened. It&rsquo;s to change your relationship to it, so the memory stops setting the terms of your present. Most people find they can hold more, react less, and recognise themselves again.",
+   "The goal isn&rsquo;t to erase what happened. It&rsquo;s to change your relationship to it, so the memory stops setting the terms of your present. Most people find they can hold more, react less, and recognize themselves again.",
    "Shayla uses EMDR among other trauma-focused approaches, chosen to fit what you bring rather than applied from a template. You&rsquo;ll never be pushed to revisit something before you&rsquo;re ready."],
   ["Something from your past still shapes how you react today",
    "You feel activated or shut down without always knowing why",
@@ -147,7 +147,7 @@ service("anxiety-depression.html", "Cognitive Behavioral Therapy", "Anxiety &amp
   "Therapy for anxiety and depression in Colorado. Solution-oriented, CBT-informed counseling with licensed clinicians, in person or by telehealth.",
   "Solution-oriented, CBT-informed work on how mood, thoughts and behavior shape one another, plus tools you can actually use.",
   ["Anxiety and depression are good at convincing you that this is simply how you are. They aren&rsquo;t, and the pattern is more changeable than it feels from inside it.",
-   "The work looks at how mood, thought and behaviour feed one another, then interrupts that loop somewhere practical. Often the first useful change is small and unglamorous, like what happens in the first hour of your day.",
+   "The work looks at how mood, thought and behavior feed one another, then interrupts that loop somewhere practical. Often the first useful change is small and unglamorous, like what happens in the first hour of your day.",
    "You&rsquo;ll leave sessions with something to try, not just something to think about. And we&rsquo;ll keep an honest eye on whether it&rsquo;s working."],
   ["Worry runs constantly in the background",
    "You&rsquo;ve lost interest in things that used to matter",
@@ -157,8 +157,8 @@ service("anxiety-depression.html", "Cognitive Behavioral Therapy", "Anxiety &amp
   STD, 'Shayla Martinez-O&rsquo;Brien or Chrissie Flynn-Weirich. <a href="team.html">Meet the team</a>.',
   process=[
    "We start by getting specific. &ldquo;Anxious&rdquo; and &ldquo;low&rdquo; cover an enormous range, and the useful detail is in when it shows up, what it costs you, and what you&rsquo;ve already tried.",
-   "From there the work is a loop: notice the pattern, test a change, look honestly at what happened. Sometimes the change is a thought you learn to catch. Often it&rsquo;s behavioural and unglamorous — sleep, mornings, one thing you&rsquo;ve been avoiding.",
-   "Depression usually needs the behaviour to move first, because waiting to feel motivated is a trap. Anxiety usually needs the avoidance to shrink gradually, at a pace you set, so your nervous system gets evidence rather than reassurance.",
+   "From there the work is a loop: notice the pattern, test a change, look honestly at what happened. Sometimes the change is a thought you learn to catch. Often it&rsquo;s behavioral and unglamorous — sleep, mornings, one thing you&rsquo;ve been avoiding.",
+   "Depression usually needs the behavior to move first, because waiting to feel motivated is a trap. Anxiety usually needs the avoidance to shrink gradually, at a pace you set, so your nervous system gets evidence rather than reassurance.",
    "We&rsquo;ll check in openly on whether it&rsquo;s working. If it isn&rsquo;t, we change the approach or talk about what else might help, including a medication conversation with your doctor if that seems worth exploring.",
   ],
   faqs=[
@@ -167,7 +167,7 @@ service("anxiety-depression.html", "Cognitive Behavioral Therapy", "Anxiety &amp
    ("Is my anxiety bad enough for therapy?",
     "There&rsquo;s no threshold you have to clear. If worry is taking up room you&rsquo;d rather use elsewhere, that&rsquo;s reason enough. Coming in earlier generally means less to undo."),
    ("What does CBT-informed mean?",
-    "It means we use cognitive behavioural tools — examining thoughts, changing behaviour, testing beliefs against reality — without running a rigid protocol. The structure serves you, not the other way round."),
+    "It means we use cognitive behavioral tools — examining thoughts, changing behavior, testing beliefs against reality — without running a rigid protocol. The structure serves you, not the other way round."),
    ("How soon will I notice a difference?",
     "Many people feel some relief within the first few sessions, often just from having a plan. Durable change in mood usually takes longer, in the range of eight to twelve sessions for a focused piece of work."),
    ("Can I do this by telehealth?",
@@ -179,7 +179,7 @@ service("substance-use.html", "Addiction Counseling", "Substance Use &amp; Recov
   "Licensed addiction counseling for people living with substance use disorders, or anyone feeling stuck and disconnected from themselves.",
   ["You don&rsquo;t need a label or a rock-bottom story to start here. Plenty of people arrive simply knowing something has taken up more room than they want it to.",
    "The work is strengths-based. We&rsquo;ll identify what&rsquo;s already working, name honestly what isn&rsquo;t, and set goals that match your own vision of your best self rather than someone else&rsquo;s.",
-   "Chrissie holds a Colorado addiction counseling licence, so substance use is treated here as core clinical work rather than something we refer out. Shayla brings the trauma side, which so often sits underneath it."],
+   "Chrissie holds a Colorado addiction counseling license, so substance use is treated here as core clinical work rather than something we refer out. Shayla brings the trauma side, which so often sits underneath it."],
   ["Substance use has become larger than you intended",
    "You feel stuck, or disconnected from yourself and others",
    "You&rsquo;ve tried to change on your own and it hasn&rsquo;t held",
@@ -196,7 +196,7 @@ service("substance-use.html", "Addiction Counseling", "Substance Use &amp; Recov
    ("Do I have to want to quit completely?",
     "No. Some people come in aiming to stop, others to cut back or to understand a pattern before deciding. All of those are workable starting points. The goal is yours to set."),
    ("Will you tell me to go to AA?",
-    "Only if you want that. Twelve-step programmes help a great many people and we&rsquo;ll support you in one gladly, but they aren&rsquo;t the only route and we won&rsquo;t make them a condition."),
+    "Only if you want that. Twelve-step programs help a great many people and we&rsquo;ll support you in one gladly, but they aren&rsquo;t the only route and we won&rsquo;t make them a condition."),
    ("What if I relapse?",
     "You keep your appointment. A return to use is common in recovery and it tells us something about what wasn&rsquo;t yet in place. It isn&rsquo;t grounds for being discharged or lectured."),
    ("Is this confidential?",
@@ -220,7 +220,7 @@ service("couples-therapy.html", "Couples Therapy", "Couples &amp; Relationships"
   process=[
    "The first session is mostly listening, and we hear from both of you. Couples usually arrive with two accounts that don&rsquo;t match. That&rsquo;s normal, and the mismatch itself is useful information.",
    "Then we slow the recurring argument down. Most couples aren&rsquo;t fighting about the thing they&rsquo;re fighting about — underneath it is a request that hasn&rsquo;t landed, or a hurt that never got acknowledged.",
-   "A lot of sessions involve practising the conversation in the room rather than reporting on it afterwards. It feels awkward at first. It&rsquo;s also where the change happens, because you get to try a different move while someone can slow it down.",
+   "A lot of sessions involve practicing the conversation in the room rather than reporting on it afterwards. It feels awkward at first. It&rsquo;s also where the change happens, because you get to try a different move while someone can slow it down.",
    "We stay even-handed. This isn&rsquo;t a forum for deciding who was right, and neither of you will be recruited against the other.",
   ],
   faqs=[
@@ -297,7 +297,7 @@ emit("mamas-golden-hour.html",
 
     <h2>Why a group and not individual therapy</h2>
     <p>A lot of what makes new motherhood hard is the conviction that everyone else is finding it easier. That belief is remarkably resistant to a therapist telling you otherwise, and it tends to dissolve the first time another mother says the thing out loud.</p>
-    <p>Groups also normalise the parts that feel unspeakable — ambivalence, resentment, grief for the life before, the specific loneliness of being with a baby all day. Hearing it from someone else does something reassurance can&rsquo;t.</p>
+    <p>Groups also normalize the parts that feel unspeakable — ambivalence, resentment, grief for the life before, the specific loneliness of being with a baby all day. Hearing it from someone else does something reassurance can&rsquo;t.</p>
     <p>Some people do the group alongside individual therapy, here or elsewhere. Others do it on its own. Either is fine, and it&rsquo;s worth saying that the group is not a substitute for individual treatment if you&rsquo;re struggling badly.</p>
 
     {"" if G["enrolling"] else """<div class="callout warn"><p><strong>This cohort is full.</strong> Get in touch and we&rsquo;ll tell you as soon as the next one opens, usually a few weeks ahead of the start date.</p></div>"""}

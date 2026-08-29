@@ -5,8 +5,8 @@
   the "Code" / "</>" tab. Set:
       To      {{to_email}}   (or hard-code goldenhourwellco@gmail.com)
       From    your EmailJS sending address
-      Reply-To {{from_email}}    <- important, so Reply goes to the enquirer
-      Subject New enquiry from {{from_name}} — {{enquiry_type}}
+      Reply-To {{from_email}}    <- important, so Reply goes to the inquirer
+      Subject New inquiry from {{from_name}} — {{inquiry_type}}
 
   Table layout and inline styles on purpose: Gmail, Outlook and Apple Mail
   strip <style> blocks and ignore flex/grid. This renders the same in all
@@ -43,9 +43,9 @@
         <!-- title -->
         <tr>
           <td style="padding:28px 28px 6px;">
-            <div style="font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#A85832;font-weight:700;">New enquiry</div>
+            <div style="font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#A85832;font-weight:700;">New inquiry</div>
             <div style="font-size:23px;color:#2E2034;font-weight:700;padding-top:8px;line-height:1.25;">{{from_name}}</div>
-            <div style="font-size:14px;color:#6E6A66;padding-top:6px;">{{enquiry_type}}</div>
+            <div style="font-size:14px;color:#6E6A66;padding-top:6px;">{{inquiry_type}}</div>
           </td>
         </tr>
 
@@ -91,7 +91,7 @@
             <table cellpadding="0" cellspacing="0" border="0">
               <tr>
                 <td style="background:#A85832;border-radius:8px;">
-                  <a href="mailto:{{from_email}}?subject=Re%3A%20your%20enquiry%20to%20Golden%20Hour%20Wellness"
+                  <a href="mailto:{{from_email}}?subject=Re%3A%20your%20inquiry%20to%20Golden%20Hour%20Wellness"
                      style="display:inline-block;padding:13px 26px;font-size:14px;font-weight:600;color:#ffffff;text-decoration:none;">
                     Reply to {{from_name}}
                   </a>

@@ -66,8 +66,8 @@ Both templates are built and live in the dashboard:
 
 | Template | ID | Goes to |
 |---|---|---|
-| Golden Hour - New Enquiry | `template_ql76otu` | **chad.m.moravec@gmail.com** (temporary) |
-| Golden Hour - Auto Reply | `template_tkcx2rd` | `{{from_email}}` — the enquirer |
+| Golden Hour - New Inquiry | `template_ql76otu` | **chad.m.moravec@gmail.com** (temporary) |
+| Golden Hour - Auto Reply | `template_tkcx2rd` | `{{from_email}}` — the inquirer |
 
 Service `service_0z3erja` (Gmail), public key `4kZZJo5E8VJGKzGGg`. All four IDs
 are already wired into `contact.html`.
@@ -84,7 +84,7 @@ Two fields in the EmailJS dashboard. Nothing in the codebase changes.
 Note the account itself is registered to `ghwco2026@gmail.com` while the site
 publishes `goldenhourwellco@gmail.com`. Both are hers; just make sure the one
 she reads daily is the one in *To Email*, because that is where a distressed
-first-time enquiry lands.
+first-time inquiry lands.
 
 ### Lock it down before handover
 
