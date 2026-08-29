@@ -6,9 +6,10 @@
   "scripts": {
     "pages": "python3 build_pages.py && python3 build_content.py && python3 build_services.py && python3 build_legal.py && python3 apply_content.py",
     "check": "python3 apply_content.py --check",
-    "build": "npm run pages && tinacms build",
+    "build": "npm run pages && tinacms build && bash scripts/collect.sh",
     "dev": "npm run pages && tinacms dev -c \"python3 -m http.server 8080\"",
-    "serve": "python3 -m http.server 8080"
+    "serve": "python3 -m http.server 8080",
+    "collect": "bash scripts/collect.sh"
   },
   "devDependencies": {
     "tinacms": "^2.7.0",

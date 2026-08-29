@@ -4,10 +4,11 @@ __pycache__/
 .env
 .env.local
 
-# Tina build artefacts. admin/ IS committed — it's the editor Shayla opens —
-# but these two are regenerated on every build and only cause merge noise.
-tina/__generated__/
-tina/tina-lock.json
-.tina/
+# tina-lock.json MUST be committed — TinaCloud reads it to index the content
+# schema, and without it the editor never loads. Only the generated client
+# code is ignored.
+tina/__generated__/*
+!tina/__generated__/.gitkeep
 
 .DS_Store
+dist/
