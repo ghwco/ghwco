@@ -48,6 +48,7 @@ commits to GitHub, and the build re-runs the generators.
 | `group.json` | Mama's Golden Hour cohort — dates, price, capacity, enrolling flag |
 | `practice.json` | Phone, email, insurers, footer blurb, social links |
 | `faq.json` | The FAQ page questions |
+| `blog/*.json` | One file per Journal post. `published: false` means the page is never built at all |
 
 Tina never touches the HTML. A bad edit can produce awkward wording; it
 cannot break layout, schema or accessibility. That boundary is the point.

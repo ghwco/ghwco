@@ -35,7 +35,8 @@ MARK = '''<svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
       </svg>'''
 
 NAV = [("about.html", "About"), ("services.html", "Services"),
-       ("team.html", "Our Team"), ("index.html#insurance", "Insurance"),
+       ("team.html", "Our Team"), ("blog.html", "Journal"),
+       ("index.html#insurance", "Insurance"),
        ("contact.html", "Contact")]
 
 RIDGE = '''  <div class="footer__ridge" aria-hidden="true">
@@ -96,6 +97,7 @@ FOOTER = f'''<footer class="footer">
         <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
         <li><a href="team.html">Our Team</a></li>
+        <li><a href="blog.html">Journal</a></li>
         <li><a href="faq.html">FAQ</a></li>
         <li><a href="index.html#insurance">Insurance</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -180,6 +182,15 @@ PAGE_CSS = '''
 .prose figure img{display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
   border-radius:var(--r-lg); box-shadow:var(--shadow-md)}
 .prose figcaption{margin-top:.7rem; font-size:.78rem; color:var(--ink-soft); text-align:center}
+
+/* Blog cards carry a hero image, so the padding moves inside and the image
+   sits flush to the card edge. aspect-ratio keeps the grid even regardless of
+   what dimensions the author uploads through the CMS. */
+.postcards .card{padding:0; overflow:hidden}
+.postcard img{display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover}
+.postcard__body{padding:1.5rem 1.5rem 1.75rem}
+.postcard__meta{margin:0 0 .5rem; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft)}
+.postcard h3{margin-top:0}
 
 .card{background:var(--shell); border:1px solid var(--line); border-radius:var(--r); padding:1.75rem 1.5rem; text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:border-color .2s ease, transform .2s ease, box-shadow .2s ease}
 .card:hover{border-color:rgba(168,88,50,.32); transform:translateY(-2px); box-shadow:var(--shadow-sm)}

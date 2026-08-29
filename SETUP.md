@@ -37,6 +37,7 @@ generated and committed, all four site URLs registered including localhost.
 | Mama's Golden Hour — cohort | Dates, time, price, capacity, *enrolling* toggle |
 | Practice details | Phone, email, insurers, footer blurb, social links |
 | FAQ | The questions, reorderable, add/remove |
+| **Journal** | Blog posts — create, edit, and a real Published on/off switch |
 
 Tina edits JSON in `/content`, never the HTML. It commits to GitHub, which
 triggers a Cloudflare build, which re-runs the generators. A bad edit can

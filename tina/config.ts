@@ -202,6 +202,77 @@ export default defineConfig({
         ],
       },
 
+      // ─────────────────────────────────────────────── Journal
+      // The only collection where create and delete are allowed — this is
+      // the one Shayla is meant to add to. `published` is a real switch, not
+      // a display flag: an unpublished post is never written to disk by
+      // build_blog.py, so there's no orphan URL left on the server.
+      {
+        name: "blog",
+        label: "Journal",
+        path: "content/blog",
+        format: "json",
+        defaultItem: () => ({
+          published: false,
+          date: new Date().toISOString().slice(0, 10),
+          author: "Shayla Martinez-O'Brien, LPC",
+          heroImage: "assets/img/blog-emdr.jpg",
+        }),
+        ui: {
+          filename: {
+            // The filename becomes the URL, so derive it from the slug and
+            // keep it out of the author's hands.
+            slugify: (values) =>
+              (values?.slug || values?.title || "untitled")
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-|-$/g, ""),
+          },
+        },
+        fields: [
+          {
+            type: "boolean",
+            name: "published",
+            label: "Published",
+            description:
+              "Off = nobody can see it, not even by guessing the address. Turn it on when you're ready, and it appears on the Journal page within a couple of minutes.",
+          },
+          { type: "string", name: "title", label: "Title", isTitle: true, required: true },
+          {
+            type: "string",
+            name: "slug",
+            label: "Web address",
+            description: "Lowercase words with hyphens, e.g. what-emdr-feels-like",
+          },
+          { type: "datetime", name: "date", label: "Date", ui: { dateFormat: "YYYY-MM-DD" } },
+          { type: "string", name: "author", label: "Author" },
+          {
+            type: "string",
+            name: "excerpt",
+            label: "Summary",
+            ui: { component: "textarea" },
+            description: "One or two sentences. Shows on the Journal page and in Google results.",
+          },
+          { type: "image", name: "heroImage", label: "Header image" },
+          {
+            type: "string",
+            name: "heroAlt",
+            label: "Image description",
+            description:
+              "Describe the picture for people using a screen reader. One plain sentence.",
+          },
+          {
+            type: "string",
+            name: "body",
+            label: "Post",
+            list: true,
+            ui: { component: "textarea", itemProps: (i) => ({ label: (i || "").slice(0, 60) }) },
+            description:
+              "One box per paragraph. Start a box with ## to make it a heading. Use the + button to add another paragraph.",
+          },
+        ],
+      },
+
       // ─────────────────────────────────────────────── FAQ
       {
         name: "faq",
