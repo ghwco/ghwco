@@ -24,12 +24,47 @@ items = "".join(
 
 emit("faq.html",
   title="Frequently Asked Questions | Golden Hour Wellness Colorado",
-  desc="Answers about insurance, cost, telehealth, EMDR, scheduling and getting started with Golden Hour Wellness Colorado.",
+  desc="Insurance, rates and answers about telehealth, EMDR, scheduling and getting started with Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna.",
   extra_head=f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>',
-  body=head_block("FAQ", "Questions people usually ask first.",
+  body=head_block("FAQ", "Insurance, rates and the questions people ask first.",
     "If yours isn&rsquo;t here, just ask. We&rsquo;d rather answer it than have it stop you.") + f'''
+<section class="section" id="insurance" style="background:var(--sand)">
+  <div class="wrap prose">
+    <p class="eyebrow">Insurance &amp; rates</p>
+    <h2>What therapy here costs</h2>
+    <p>We&rsquo;re in-network with <strong>Aetna</strong>, <strong>United Healthcare</strong>
+    and <strong>Cigna</strong> for individual therapy. With one of those plans you pay
+    whatever your policy sets as your copay or coinsurance, and we&rsquo;ll help you
+    check that figure before your first session rather than after it.</p>
+
+    <table>
+      <tr><th>In-network plans</th><td>Aetna, United Healthcare, Cigna</td></tr>
+      <tr><th>Session length</th><td>50 minutes, individual</td></tr>
+      <tr><th>First step</th><td>A free 15-minute consultation</td></tr>
+      <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only &mdash; $25 per session, or $150 for six weeks</td></tr>
+    </table>
+
+    <h3>If we&rsquo;re out of network</h3>
+    <p>Plenty of plans reimburse a meaningful share of out-of-network therapy, and
+    most people don&rsquo;t know what theirs does. You can
+    <a href="index.html#benefits">check your out-of-network benefits in about a minute</a>
+    &mdash; it asks for your insurer and member ID and tells you what you&rsquo;d get back.</p>
+
+    <h3>Self-pay</h3>
+    <p>You&rsquo;re entitled to a written <a href="good-faith-estimate.html">Good Faith
+    Estimate</a> of expected charges before you begin, under the federal No Surprises
+    Act. Ask and we&rsquo;ll send one. No one should start therapy unsure what it costs.</p>
+
+    <div class="callout warn">
+      <p><strong>Insurance is not accepted for Mama&rsquo;s Golden Hour.</strong>
+      Group sessions are self-pay. Insurance applies to individual therapy only.</p>
+    </div>
+  </div>
+</section>
+
 <section class="section">
   <div class="wrap">
+    <h2 style="margin-bottom:2rem">Questions people usually ask first</h2>
     <div class="faq">{items}</div>
   </div>
 </section>''' + cta())

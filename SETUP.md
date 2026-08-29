@@ -95,6 +95,34 @@ is visible in page source by design; the domain allowlist is what stops it
 becoming a spam relay. Free tier is 200 sends/month — fine for a practice this
 size, but worth watching if it ever gets scraped.
 
+---
+
+## Whenever the Tina schema changes — READ THIS
+
+Editing `tina/config.ts` (adding a collection, adding a field) puts the local
+schema out of step with what TinaCloud has indexed. The Cloudflare build then
+fails with:
+
+    The local GraphQL schema doesn't match the remote GraphQL schema.
+    Reason: [NON_BREAKING - TYPE_ADDED] Type 'X' was added
+
+This is Tina refusing to build against a stale schema rather than serving
+something wrong. The fix is always the same:
+
+```bash
+cd "$HOME/Desktop/Projects/Clients/golden-hour-wellness-WORKING-SOURCE"
+npx tinacms dev      # wait for "Dev Server is active", then Ctrl+C
+```
+
+That regenerates `tina-lock.json`. Commit and push it — TinaCloud re-indexes
+from the push, and the next build passes.
+
+**Content edits never need this.** Only schema changes do. Anything Shayla
+does through /admin is content, so she will never hit it.
+
+The previous successful deployment stays live throughout, so a failed build
+never takes the site down.
+
 ## Still outstanding
 
 **The Gmail/HIPAA gap.** The form routes to consumer Gmail, which has no BAA.

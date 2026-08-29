@@ -34,9 +34,13 @@ MARK = '''<svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
         <circle cx="32" cy="32" r="29" fill="none" stroke="#A85832" stroke-width="2.5"/>
       </svg>'''
 
-NAV = [("about.html", "About"), ("services.html", "Services"),
-       ("team.html", "Our Team"), ("blog.html", "Journal"),
-       ("index.html#insurance", "Insurance"),
+# Insurance used to be an anchor into the homepage, which meant the nav item
+# scrolled you somewhere rather than taking you to a page — confusing, and it
+# gave the topic no URL of its own. It now lives at the top of the FAQ, which
+# is where people look for cost questions anyway.
+NAV = [("index.html", "Home"), ("about.html", "About"),
+       ("services.html", "Services"), ("team.html", "Our Team"),
+       ("blog.html", "Journal"), ("faq.html", "FAQ"),
        ("contact.html", "Contact")]
 
 RIDGE = '''  <div class="footer__ridge" aria-hidden="true">
@@ -99,7 +103,7 @@ FOOTER = f'''<footer class="footer">
         <li><a href="team.html">Our Team</a></li>
         <li><a href="blog.html">Journal</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="index.html#insurance">Insurance</a></li>
+        <li><a href="faq.html#insurance">Insurance &amp; rates</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
