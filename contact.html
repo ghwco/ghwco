@@ -440,8 +440,8 @@
     var CFG = {
       publicKey:  '4kZZJo5E8VJGKzGGg',
       serviceId:  'service_0z3erja',
-      templateId: 'template_cbg3w5b',          // the notification template
-      autoReplyId: 'template_w3gvgwm' // sends the confirmation to the enquirer
+      templateId: 'template_ql76otu',          // the notification template
+      autoReplyId: 'template_tkcx2rd' // sends the confirmation to the enquirer
     };
 
     function done(ok) {
@@ -474,6 +474,9 @@
       enquiry_type:       form.interest ? form.interest.value : 'General enquiry',
       insurance:          form.insurance.value || 'Not given',
       message:            form.message.value,
+      // NOTE: this does NOT control where the notification goes. Routing is
+      // the template's "To Email" field in the EmailJS dashboard. Kept only
+      // so the address is available inside the template if ever needed.
       to_email:           'goldenhourwellco@gmail.com',
       sent_at:            new Date().toLocaleString('en-US', {
                             timeZone: 'America/Denver',

@@ -1,145 +1,98 @@
-# Launch setup — the parts that need your logged-in accounts
+# Launch setup — state of play
 
-Everything in the codebase is done. What's left is four dashboards, and each
-one needs credentials I shouldn't be handling. Roughly 20 minutes total.
-
-Work through these in order — Cloudflare needs the repo, Tina needs the repo
-and Cloudflare's env vars, EmailJS is independent.
+Live preview: **https://ghwco.pages.dev**
+Repo: **github.com/ghwco/ghwco** (Shayla's account, Chad as collaborator)
 
 ---
 
-## 1. Push to the repo in Shayla's name
+## Done
 
-The push script currently targets `losmanzanos/shayla`. Point it at the new
-repo first:
+**GitHub.** Site pushed to `ghwco/ghwco`. `push-to-github.sh` targets it and
+stages through `~/Sites/ghwco`.
 
-```bash
-# edit this line in push-to-github.sh
-REPO="https://github.com/<owner>/<repo>.git"
-```
-
-Then push. The old preview repo can stay as-is or be deleted — nothing
-depends on it.
-
-**Verify:** `content/`, `tina/`, `emailjs/`, `package.json` and `.gitignore`
-are all present in the pushed tree.
-
----
-
-## 2. Cloudflare Pages
-
-Connect the repo, then set:
+**Cloudflare Pages.** Connected to the repo, auto-deploying from `main`.
 
 | Setting | Value |
 |---|---|
-| Framework preset | None |
 | Build command | `npm install && npm run build` |
-| Build output directory | `/` |
-| Root directory | *(leave blank)* |
+| Build output | `dist` |
+| Root directory | *(blank)* |
 
-Environment variables (Settings → Environment variables, **both** Production
-and Preview):
+Environment variables set: `NEXT_PUBLIC_TINA_CLIENT_ID`, `TINA_TOKEN`,
+`TINA_SEARCH_TOKEN`, `PYTHON_VERSION=3.11`, `NODE_VERSION=20`.
 
-```
-NEXT_PUBLIC_TINA_CLIENT_ID   <from Tina, step 3>
-TINA_TOKEN                   <from Tina, step 3>
-PYTHON_VERSION               3.11
-NODE_VERSION                 20
-```
+> Switch `TINA_TOKEN` and `TINA_SEARCH_TOKEN` from type **Text** to type
+> **Secret**. As Text they're readable in plaintext by anyone with dashboard
+> access. Same values, just re-typed.
 
-You'll need to come back and fill the two Tina values after step 3, then
-re-run the deploy.
+**TinaCMS.** Project "Golden Hour Wellness Colorado", client ID
+`434178a2-76c3-4fe0-8bf6-83b3b3841bc8`. Repo connected, `tina-lock.json`
+generated and committed, all four site URLs registered including localhost.
 
-**Custom domain:** add `goldenhourwellnesscolorado.com` and `www` once the
-build is green. Cloudflare will want the nameservers pointed at it — that's
-the moment the site goes live, so do it last.
+### What Shayla can edit at /admin
 
-**Verify:** the deploy log shows the Python generators running, then
-`tinacms build`. Visit `/sitemap.xml` and `/robots.txt` on the
-`*.pages.dev` URL.
-
----
-
-## 3. TinaCMS
-
-In app.tina.io, on the project connected to this repo:
-
-1. Overview → copy **Client ID** → that's `NEXT_PUBLIC_TINA_CLIENT_ID`
-2. Tokens → create/copy a **read-only token** → that's `TINA_TOKEN`
-3. Paste both into Cloudflare (step 2) and redeploy
-4. Configuration → confirm the branch is `main`
-
-Then add Shayla as a user in Tina so she can log in. She goes to
-`goldenhourwellnesscolorado.com/admin/`, signs in, and edits.
-
-### What she can edit
-
-| Collection | What it controls |
+| Collection | Controls |
 |---|---|
 | Homepage | Hero headline and intro, the three points under it, section headlines |
-| Mama's Golden Hour — cohort | Dates, time, price, capacity, and an *enrolling* toggle |
+| Mama's Golden Hour — cohort | Dates, time, price, capacity, *enrolling* toggle |
 | Practice details | Phone, email, insurers, footer blurb, social links |
-| FAQ | The ten questions, reorderable, add/remove |
+| FAQ | The questions, reorderable, add/remove |
 
-**The important part:** Tina edits JSON in `/content`, never the HTML. It
-commits to GitHub, which triggers a Cloudflare build, which re-runs the
-generators. A bad edit can produce awkward wording; it cannot break layout,
-schema, or accessibility. That boundary is deliberate.
+Tina edits JSON in `/content`, never the HTML. It commits to GitHub, which
+triggers a Cloudflare build, which re-runs the generators. A bad edit can
+produce awkward wording; it cannot break layout, schema or accessibility.
+That boundary is deliberate.
 
-The cohort fields are the ones that will actually get used — they change
-every term, and the `enrolling` toggle swaps in a "this cohort is full"
-notice without anyone editing prose.
-
-**Verify:** make a trivial edit in `/admin`, save, and watch a Cloudflare
-build kick off. Confirm the change appears on the live page.
+The cohort fields are the ones that will actually get used — they change every
+term, and the `enrolling` toggle swaps in a "this cohort is full" notice
+without anyone touching prose.
 
 ---
 
-## 4. EmailJS
+## Next: run one deploy with the full pipeline
 
-Two templates are in `emailjs/`. Paste each into EmailJS → Email Templates →
-new template → the **Code** (`</>`) tab.
+Deployments → Retry deployment. This is the **first** run that executes
+`tinacms build`, so it's the one that replaces the placeholder at `/admin`
+with the real editor. Watch the log rather than assuming — `python3` on
+Cloudflare's image and `tinacms build` are both unproven there.
 
-**`template-notification.html`** — goes to the practice.
-
-| Field | Value |
-|---|---|
-| To | `goldenhourwellco@gmail.com` |
-| Reply-To | `{{from_email}}` ← so Reply reaches the enquirer |
-| Subject | `New enquiry from {{from_name}} — {{enquiry_type}}` |
-
-**`template-autoreply.html`** — goes to the person who wrote in. Optional but
-worth it; it carries the crisis numbers, which matters for a form someone
-might fill in at 2am.
-
-| Field | Value |
-|---|---|
-| To | `{{from_email}}` |
-| Reply-To | `goldenhourwellco@gmail.com` |
-| Subject | `We got your message — Golden Hour Wellness Colorado` |
-
-Then replace four placeholders in `contact.html`:
-
-```
-EMAILJS_PUBLIC_KEY               Account → General → Public Key
-EMAILJS_SERVICE_ID               Email Services → your Gmail service
-EMAILJS_TEMPLATE_ID              the notification template
-EMAILJS_AUTOREPLY_TEMPLATE_ID    the auto-reply, or '' to skip
-```
-
-They appear in two places — the `emailjs.init()` call near the bottom and the
-`CFG` object just below it.
-
-**Lock it down before launch:** EmailJS → Account → Security → add
-`goldenhourwellnesscolorado.com` to the allowed origins, and turn on their
-CAPTCHA. The public key is visible in page source by design; the domain
-allowlist is what stops it becoming a spam relay.
-
-**Verify:** submit the form on the live site. Until the keys are in, it
-fails loudly with a console error and tells the visitor to call instead —
-deliberately, so nobody sees "message sent" for an email that never sent.
+Then add Shayla as a user in Tina so she can sign in.
 
 ---
+
+## EmailJS — built, currently routed to Chad for testing
+
+Both templates are built and live in the dashboard:
+
+| Template | ID | Goes to |
+|---|---|---|
+| Golden Hour - New Enquiry | `template_ql76otu` | **chad.m.moravec@gmail.com** (temporary) |
+| Golden Hour - Auto Reply | `template_tkcx2rd` | `{{from_email}}` — the enquirer |
+
+Service `service_0z3erja` (Gmail), public key `4kZZJo5E8VJGKzGGg`. All four IDs
+are already wired into `contact.html`.
+
+### Handing the inbox over to Shayla
+
+Two fields in the EmailJS dashboard. Nothing in the codebase changes.
+
+1. **Template `template_ql76otu`** → *To Email* →
+   `chad.m.moravec@gmail.com` → `goldenhourwellco@gmail.com`
+2. **Template `template_tkcx2rd`** → *Reply To* →
+   `ghwco2026@gmail.com` → `goldenhourwellco@gmail.com`
+
+Note the account itself is registered to `ghwco2026@gmail.com` while the site
+publishes `goldenhourwellco@gmail.com`. Both are hers; just make sure the one
+she reads daily is the one in *To Email*, because that is where a distressed
+first-time enquiry lands.
+
+### Lock it down before handover
+
+EmailJS → Account → Security → add `goldenhourwellnesscolorado.com` and
+`ghwco.pages.dev` to allowed origins, and enable their CAPTCHA. The public key
+is visible in page source by design; the domain allowlist is what stops it
+becoming a spam relay. Free tier is 200 sends/month — fine for a practice this
+size, but worth watching if it ever gets scraped.
 
 ## Still outstanding
 
@@ -157,6 +110,11 @@ her methods that only she can confirm.
 
 **Hero photo.** Still hosted on the Squarespace CDN. It dies when she cancels
 that account. Needs downloading and moving into `assets/img/`.
+
+**DNS / custom domain.** Not done, deliberately. Adding
+`goldenhourwellnesscolorado.com` in Cloudflare and repointing nameservers is
+the moment the old Squarespace site goes dark, so it waits until Shayla has
+signed off. Chad and Claude walk through it together.
 
 **`logo-options.html` / `type-options.html`** are still in the repo. Not
 linked, `noindex`, and disallowed in robots.txt — but publicly reachable if
