@@ -1,0 +1,30 @@
+{
+  "hero": {
+    "eyebrow": "Colorado &middot; In-person &amp; telehealth",
+    "headline": "Healing happens in the *golden hour*,<br>and we'll walk it with you.",
+    "intro": "A therapist-owned practice specializing in trauma, EMDR and substance use. Come as you are; leave with a little more room to breathe.",
+    "button1": "Book a free consultation",
+    "button2": "Meet our therapists"
+  },
+  "trust": {
+    "item1": "In-network with Aetna, UHC &amp; Cigna",
+    "item2": "EMDR-trained, in person or virtual",
+    "item3": "Accepting new clients statewide"
+  },
+  "about": {
+    "headline": "A practice built around the person in the room.",
+    "intro": "Golden Hour Wellness Colorado was founded by Shayla Martinez-O&rsquo;Brien, a Licensed Professional Counselor with 11 years of clinical practice. What began as one clinician is now a small, hand-picked team."
+  },
+  "services": {
+    "headline": "Specialized care, without the clinical chill."
+  },
+  "team": {
+    "headline": "Three clinicians. Roughly 34 years of practice between them."
+  },
+  "insurance": {
+    "headline": "In-network with three major plans."
+  },
+  "cta": {
+    "headline": "Your golden hour starts with one message."
+  }
+}

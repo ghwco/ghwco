@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Edit your website — Golden Hour Wellness</title>
+<link rel="icon" href="../assets/favicon-v2.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================================
+   PROTOTYPE — client editing dashboard.
+
+   HOW THE REAL ONE WORKS
+   ----------------------
+   The site's HTML stays the source of truth. Editable elements carry a
+   data-cms="section.field" attribute. This dashboard fetches index.html,
+   parses it, builds a form from those markers, and writes edits back into
+   the same DOM. Saving serialises the document and commits it to GitHub via
+   the contents API, which triggers a Pages/Cloudflare rebuild.
+
+   Nothing is client-rendered on the public site — the HTML that ships to
+   Google is complete and static. That's the main reason for this approach
+   over a JSON-and-JavaScript setup.
+
+   WHAT'S DIFFERENT IN THIS PROTOTYPE
+   ----------------------------------
+   1. Login is faked. Production uses GitHub OAuth so only invited accounts
+      can edit, and every change is attributed to a real person.
+   2. Publish downloads the modified file instead of committing it. The
+      commit needs an OAuth token, which needs a tiny serverless endpoint
+      (free on Cloudflare Workers or Netlify).
+   Everything else — parsing, editing, live preview, revert — is real.
+   ============================================================= */
+
+:root{
+  --clay:#A85832; --clay-deep:#82431F; --gold:#F0C579;
+  --plum:#423049; --plum-deep:#2E2034;
+  --cream:#FBF7F2; --sand:#F4EBE1; --shell:#FFFDFB;
+  --ink:#2E262B; --ink-mid:#665A61; --ink-soft:#8A7C83;
+  --line:rgba(66,48,73,.14); --hair:rgba(66,48,73,.09);
+  --ok:#4F7A42; --r:10px; --r-sm:6px;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Fraunces",Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6}
+button{font-family:inherit;cursor:pointer}
+
+/* ---- login ---- */
+.gate{position:fixed;inset:0;background:var(--plum-deep);display:grid;place-items:center;z-index:100;padding:1.5rem}
+.gate__card{background:var(--shell);border-radius:14px;padding:2.5rem;max-width:24rem;width:100%;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.gate__card h1{font-family:var(--serif);font-size:1.5rem;margin:.9rem 0 .3rem;color:var(--plum)}
+.gate__card p{color:var(--ink-mid);font-size:.9rem;margin:0 0 1.6rem}
+.gh-btn{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;background:#1F2328;color:#fff;border:none;border-radius:var(--r-sm);padding:.85rem 1rem;font-weight:600;font-size:.92rem}
+.gh-btn:hover{background:#000}
+.gate small{display:block;margin-top:1.1rem;color:var(--ink-soft);font-size:.76rem;line-height:1.5}
+
+/* ---- chrome ---- */
+.top{display:flex;align-items:center;gap:1rem;padding:.7rem 1.25rem;background:var(--shell);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.top__brand{display:flex;align-items:center;gap:.6rem;margin-right:auto;font-family:var(--serif);font-weight:600;color:var(--clay-deep)}
+.top__brand small{display:block;font-family:var(--sans);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--plum);font-weight:700}
+.pill{font-size:.72rem;font-weight:600;padding:.28rem .6rem;border-radius:99px;background:var(--sand);color:var(--ink-mid)}
+.pill.dirty{background:#FBEBD9;color:#8A4A16}
+.pill.saved{background:#E6F0E2;color:var(--ok)}
+.btn{border:1px solid var(--line);background:var(--shell);color:var(--plum);border-radius:var(--r-sm);padding:.6rem 1rem;font-weight:600;font-size:.86rem}
+.btn:hover{border-color:var(--clay);color:var(--clay-deep)}
+.btn--primary{background:var(--clay);border-color:var(--clay);color:#fff}
+.btn--primary:hover{background:var(--clay-deep);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.shell{display:grid;grid-template-columns:390px 1fr;height:calc(100vh - 57px)}
+@media (max-width:900px){.shell{grid-template-columns:1fr;height:auto}}
+
+/* ---- editor ---- */
+.side{border-right:1px solid var(--line);overflow-y:auto;background:var(--shell)}
+.side__intro{padding:1.1rem 1.25rem;background:var(--sand);border-bottom:1px solid var(--line);font-size:.85rem;color:var(--ink-mid)}
+.grp{border-bottom:1px solid var(--hair)}
+.grp__hd{display:flex;align-items:center;gap:.5rem;width:100%;background:none;border:none;padding:.95rem 1.25rem;font-weight:600;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--plum);text-align:left}
+.grp__hd:hover{background:var(--cream)}
+.grp__hd i{margin-left:auto;font-style:normal;color:var(--ink-soft);transition:transform .2s}
+.grp[open] .grp__hd i{transform:rotate(180deg)}
+.grp__body{padding:.25rem 1.25rem 1.25rem}
+.f{margin-bottom:1rem}
+.f label{display:block;font-size:.76rem;font-weight:600;color:var(--ink-mid);margin-bottom:.35rem}
+.f textarea,.f input{width:100%;font-family:var(--sans);font-size:.9rem;color:var(--ink);background:var(--cream);border:1px solid var(--line);border-radius:var(--r-sm);padding:.6rem .7rem;resize:vertical}
+.f textarea:focus,.f input:focus{outline:none;border-color:var(--clay);box-shadow:0 0 0 3px rgba(168,88,50,.1);background:#fff}
+.f .tip{font-size:.72rem;color:var(--ink-soft);margin-top:.3rem}
+.empty{padding:1.5rem 1.25rem;color:var(--ink-mid);font-size:.88rem}
+.empty h3{font-family:var(--serif);font-size:1.05rem;color:var(--plum);margin:0 0 .5rem}
+.empty code{background:var(--sand);padding:.1rem .35rem;border-radius:4px;font-size:.85em}
+.f.changed label::after{content:"edited";margin-left:.5rem;font-size:.64rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--clay);background:#FBEBD9;padding:.1rem .4rem;border-radius:99px}
+
+/* ---- preview ---- */
+.prev{display:flex;flex-direction:column;background:var(--sand);min-height:60vh}
+.prev__bar{display:flex;align-items:center;gap:.5rem;padding:.55rem .9rem;border-bottom:1px solid var(--line);background:var(--shell);font-size:.78rem;color:var(--ink-soft)}
+.prev__bar .seg{display:flex;gap:.15rem;margin-left:auto;background:var(--sand);border-radius:var(--r-sm);padding:.15rem}
+.prev__bar .seg button{border:none;background:none;padding:.35rem .7rem;border-radius:4px;font-size:.76rem;font-weight:600;color:var(--ink-mid)}
+.prev__bar .seg button[aria-pressed="true"]{background:#fff;color:var(--plum);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.prev__stage{flex:1;display:grid;place-items:start center;overflow:auto;padding:1rem}
+iframe{border:0;background:#fff;box-shadow:0 6px 30px rgba(46,38,43,.13);border-radius:8px;transition:width .25s ease}
+
+/* ---- publish sheet ---- */
+.sheet{position:fixed;inset:0;background:rgba(46,32,52,.5);display:none;place-items:center;z-index:60;padding:1.5rem}
+.sheet.on{display:grid}
+.sheet__card{background:var(--shell);border-radius:14px;max-width:34rem;width:100%;padding:1.9rem;max-height:86vh;overflow:auto}
+.sheet__card h2{font-family:var(--serif);margin:0 0 .5rem;color:var(--plum);font-size:1.3rem}
+.diff{background:var(--cream);border:1px solid var(--line);border-radius:var(--r-sm);padding:.9rem;font-size:.8rem;margin:1rem 0;max-height:15rem;overflow:auto}
+.diff div{padding:.3rem 0;border-bottom:1px solid var(--hair)}
+.diff div:last-child{border:0}
+.diff b{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.diff .was{color:#9A5B4A;text-decoration:line-through}
+.diff .now{color:var(--ok)}
+.note{background:#FBEBD9;border:1px solid #E8C9A6;border-radius:var(--r-sm);padding:.85rem 1rem;font-size:.82rem;color:#7A4212;margin:1rem 0}
+.note strong{display:block;margin-bottom:.2rem}
+.row{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<!-- ============ FAKE LOGIN ============ -->
+<div class="gate" id="gate">
+  <div class="gate__card">
+    <svg width="52" height="52" viewBox="0 0 64 64" style="margin:0 auto">
+      <defs>
+        <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3CB80"/><stop offset="100%" stop-color="#DE9855"/></linearGradient>
+        <clipPath id="c1"><circle cx="32" cy="32" r="29"/></clipPath>
+      </defs>
+      <circle cx="32" cy="32" r="29" fill="#FBF7F2"/>
+      <g clip-path="url(#c1)">
+        <circle cx="32" cy="27.5" r="12.5" fill="url(#s1)"/>
+        <path d="M-4 51 L17 36.5 L27.5 46 L41 27 L55 47 L68 51 Z" fill="#B4623A"/>
+        <path d="M34.8 35.73 L41 27 L47.6 36.43 C45.6 34.5 43.9 33.9 42.5 34.7 C41.8 35.1 41.2 35.1 40.5 34.7 C38.9 33.8 36.9 34.5 34.8 35.73 Z" fill="#FBF7F2"/>
+        <rect x="0" y="51" width="64" height="13" fill="#423049"/>
+      </g>
+      <circle cx="32" cy="32" r="29" fill="none" stroke="#A85832" stroke-width="2.5"/>
+    </svg>
+    <h1>Edit your website</h1>
+    <p>Golden Hour Wellness Colorado</p>
+    <button class="gh-btn" id="signIn">
+      <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      Sign in with GitHub
+    </button>
+    <small><strong>Prototype:</strong> this button is simulated. The real version uses GitHub sign-in so only invited people can edit, and every change is recorded under their name.</small>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div class="top">
+  <div class="top__brand">
+    <span>Golden Hour Wellness<small>Website editor</small></span>
+  </div>
+  <span class="pill" id="status">No changes</span>
+  <button class="btn" id="revert" disabled>Undo all</button>
+  <button class="btn btn--primary" id="publish" disabled>Publish changes</button>
+</div>
+
+<div class="shell">
+  <aside class="side">
+    <div class="side__intro">
+      Change any text below. The preview updates as you type. Nothing goes live until you press <strong>Publish changes</strong>.
+    </div>
+    <div id="fields"></div>
+  </aside>
+
+  <section class="prev">
+    <div class="prev__bar">
+      <span id="prevLabel">Live preview</span>
+      <div class="seg">
+        <button data-w="100%" aria-pressed="true">Desktop</button>
+        <button data-w="820px" aria-pressed="false">Tablet</button>
+        <button data-w="390px" aria-pressed="false">Phone</button>
+      </div>
+    </div>
+    <div class="prev__stage"><iframe id="frame" style="width:100%;height:calc(100vh - 130px)" title="Preview"></iframe></div>
+  </section>
+</div>
+
+<!-- ============ PUBLISH SHEET ============ -->
+<div class="sheet" id="sheet">
+  <div class="sheet__card">
+    <h2 id="sheetTitle">Publish these changes?</h2>
+    <p style="color:var(--ink-mid);font-size:.9rem;margin:0">Here's exactly what will change on your website.</p>
+    <div class="diff" id="diff"></div>
+    <div class="note">
+      <strong>Prototype behaviour</strong>
+      In the real version this commits to GitHub and your site updates in about a minute. Here it downloads the updated file so you can see the result is a genuine, complete HTML page.
+    </div>
+    <div class="row">
+      <button class="btn" id="cancel">Cancel</button>
+      <button class="btn btn--primary" id="confirm">Publish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SRC = '../index.html';
+  var doc = null, original = {}, current = {}, labels = {};
+
+  /* Friendly labels + grouping for each data-cms key. */
+  var META = {
+    'hero.eyebrow':     ['Hero', 'Small line above the headline'],
+    'hero.headline':    ['Hero', 'Main headline', 'Wrap words in *asterisks* to make them gold italic'],
+    'hero.intro':       ['Hero', 'Introduction paragraph'],
+    'hero.button1':     ['Hero', 'Main button'],
+    'hero.button2':     ['Hero', 'Second button'],
+    'trust.item1':      ['Trust bar', 'First point'],
+    'trust.item2':      ['Trust bar', 'Second point'],
+    'trust.item3':      ['Trust bar', 'Third point'],
+    'about.headline':   ['About', 'Section headline'],
+    'about.intro':      ['About', 'Opening paragraph'],
+    'services.headline':['Services', 'Section headline'],
+    'team.headline':    ['Our team', 'Section headline'],
+    'insurance.headline':['Insurance', 'Section headline'],
+    'cta.headline':     ['Closing section', 'Headline']
+  };
+
+  var $ = function (s) { return document.querySelector(s); };
+
+  /* ---- *emphasis* <-> <em> so rich text stays friendly to type ----
+     Two things this has to survive a round trip, both of which broke on the
+     first attempt:
+       1. <br> line breaks. Collapsing whitespace before restoring them ate
+          the newline and silently reflowed the headline, so breaks are
+          parked on a sentinel first.
+       2. The <span class="nb"> that keeps "golden hour," from splitting
+          across lines at small sizes. Emphasis plus any punctuation stuck
+          to it is rewrapped in that span on the way back out.            */
+  var NL = ' ';
+
+  function htmlToText(el) {
+    var out = '';
+    el.childNodes.forEach(function (n) {
+      if (n.nodeType === 3) out += n.textContent;
+      else if (n.nodeName === 'BR') out += NL;
+      else if (n.nodeName === 'EM') out += '*' + n.textContent + '*';
+      else out += htmlToText(n);
+    });
+    return out.replace(/[ \t\r\n]+/g, ' ')
+              .replace(new RegExp('\\s*' + NL + '\\s*', 'g'), '\n')
+              .trim();
+  }
+
+  function textToHtml(t) {
+    return t.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/\*([^*]+)\*(\S*)/g, '<span class="nb"><em>$1</em>$2</span>')
+            .replace(/\n/g, '<br>');
+  }
+
+  /* ---- boot ---- */
+  fetch(SRC).then(function (r) { return r.text(); }).then(function (html) {
+    doc = new DOMParser().parseFromString(html, 'text/html');
+
+    // make relative assets resolve while previewing from /admin/
+    var base = doc.createElement('base');
+    base.href = new URL('../', location.href).href;
+    doc.head.insertBefore(base, doc.head.firstChild);
+
+    doc.querySelectorAll('[data-cms]').forEach(function (el) {
+      var k = el.getAttribute('data-cms');
+      original[k] = el.hasAttribute('data-cms-rich') ? htmlToText(el) : el.textContent.trim();
+      current[k] = original[k];
+    });
+
+    // Fail loudly. An empty sidebar with a working preview looks like a broken
+    // editor; it actually means the page it loaded carries no edit markers.
+    if (!Object.keys(original).length) {
+      $('#fields').innerHTML =
+        '<div class="empty">' +
+        '<h3>No editable fields found</h3>' +
+        '<p>The dashboard loaded <code>index.html</code> successfully, but that file contains no <code>data-cms</code> markers, so there is nothing to edit.</p>' +
+        '<p>This normally means the copy being served is older than the tagged one. Re-sync the site files and reload.</p>' +
+        '</div>';
+      $('#status').textContent = 'No fields';
+      return;
+    }
+
+    buildForm();
+    render();
+    $('#status').textContent = Object.keys(original).length + ' fields loaded';
+  }).catch(function (e) {
+    $('#fields').innerHTML =
+      '<div class="empty"><h3>Could not load the page</h3>' +
+      '<p>Serve this over http rather than opening the file directly, so the dashboard can fetch <code>index.html</code>.</p>' +
+      '<p style="color:var(--ink-soft);font-size:.78rem">' + String(e) + '</p></div>';
+  });
+
+  function buildForm() {
+    var groups = {};
+    Object.keys(original).forEach(function (k) {
+      var m = META[k] || ['Other', k];
+      (groups[m[0]] = groups[m[0]] || []).push(k);
+    });
+
+    var wrap = $('#fields'), first = true;
+    Object.keys(groups).forEach(function (g) {
+      var d = document.createElement('details');
+      d.className = 'grp';
+      if (first) { d.open = true; first = false; }
+      var body = groups[g].map(function (k) {
+        var m = META[k] || ['Other', k];
+        var long = original[k].length > 60;
+        return '<div class="f" data-f="' + k + '">' +
+          '<label for="i_' + k + '">' + m[1] + '</label>' +
+          (long
+            ? '<textarea id="i_' + k + '" rows="' + Math.min(6, Math.ceil(original[k].length / 46)) + '" data-k="' + k + '"></textarea>'
+            : '<input id="i_' + k + '" type="text" data-k="' + k + '">') +
+          (m[2] ? '<div class="tip">' + m[2] + '</div>' : '') +
+          '</div>';
+      }).join('');
+      d.innerHTML = '<summary class="grp__hd" style="list-style:none">' + g + '<i>⌄</i></summary>' +
+                    '<div class="grp__body">' + body + '</div>';
+      wrap.appendChild(d);
+    });
+
+    // summary elements need the click swallowed to behave as a button row
+    wrap.querySelectorAll('input,textarea').forEach(function (inp) {
+      inp.value = original[inp.dataset.k];
+      inp.addEventListener('input', function () {
+        current[inp.dataset.k] = inp.value;
+        inp.closest('.f').classList.toggle('changed', inp.value !== original[inp.dataset.k]);
+        render();
+      });
+    });
+  }
+
+  function changedKeys() {
+    return Object.keys(original).filter(function (k) { return current[k] !== original[k]; });
+  }
+
+  var t;
+  function render() {
+    doc.querySelectorAll('[data-cms]').forEach(function (el) {
+      var k = el.getAttribute('data-cms'), v = current[k];
+      if (el.hasAttribute('data-cms-rich')) {
+        el.innerHTML = textToHtml(v);
+      } else if (el.children.length) {
+        // keep child markup (icons); replace only the text nodes
+        var done = false;
+        el.childNodes.forEach(function (n) {
+          if (n.nodeType === 3 && n.textContent.trim()) { n.textContent = done ? '' : v; done = true; }
+        });
+        if (!done) el.appendChild(doc.createTextNode(v));
+      } else {
+        el.textContent = v;
+      }
+    });
+
+    var n = changedKeys().length;
+    var st = $('#status');
+    st.textContent = n ? n + ' unpublished change' + (n > 1 ? 's' : '') : 'No changes';
+    st.className = 'pill' + (n ? ' dirty' : '');
+    $('#publish').disabled = !n;
+    $('#revert').disabled = !n;
+
+    clearTimeout(t);
+    t = setTimeout(function () {
+      $('#frame').srcdoc = '<!DOCTYPE html>' + doc.documentElement.outerHTML;
+    }, 220);
+  }
+
+  /* ---- controls ---- */
+  $('#signIn').addEventListener('click', function () { $('#gate').style.display = 'none'; });
+
+  document.querySelectorAll('.seg button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.seg button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      $('#frame').style.width = b.dataset.w;
+      $('#prevLabel').textContent = 'Live preview — ' + b.textContent;
+    });
+  });
+
+  $('#revert').addEventListener('click', function () {
+    Object.keys(original).forEach(function (k) { current[k] = original[k]; });
+    document.querySelectorAll('[data-k]').forEach(function (i) { i.value = original[i.dataset.k]; });
+    document.querySelectorAll('.f').forEach(function (f) { f.classList.remove('changed'); });
+    render();
+  });
+
+  $('#publish').addEventListener('click', function () {
+    $('#diff').innerHTML = changedKeys().map(function (k) {
+      var m = META[k] || ['', k];
+      return '<div><b>' + m[0] + ' — ' + m[1] + '</b>' +
+             '<span class="was">' + esc(original[k]) + '</span><br>' +
+             '<span class="now">' + esc(current[k]) + '</span></div>';
+    }).join('');
+    $('#sheet').classList.add('on');
+  });
+  $('#cancel').addEventListener('click', function () { $('#sheet').classList.remove('on'); });
+
+  $('#confirm').addEventListener('click', function () {
+    var clone = doc.cloneNode(true);
+    var b = clone.querySelector('base'); if (b) b.remove();          // preview-only
+    clone.querySelectorAll('[data-cms]').forEach(function (el) {});  // markers stay; the CMS needs them
+    var out = '<!DOCTYPE html>\n' + clone.documentElement.outerHTML;
+
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([out], { type: 'text/html' }));
+    a.download = 'index.html';
+    a.click();
+
+    $('#sheet').classList.remove('on');
+    Object.keys(original).forEach(function (k) { original[k] = current[k]; });
+    document.querySelectorAll('.f').forEach(function (f) { f.classList.remove('changed'); });
+    var st = $('#status'); st.textContent = 'Published'; st.className = 'pill saved';
+    $('#publish').disabled = true; $('#revert').disabled = true;
+  });
+
+  function esc(s) { return s.replace(/[<>&]/g, function (c) { return ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]; }); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Old Squarespace URLs -> new pages.  301 = permanent, which is what
+# passes existing search ranking through to the new address.
+# Cloudflare Pages and Netlify both read this file. GitHub Pages does NOT,
+# so redirects only take effect once the site is on its real host.
+
+/about                 /about.html              301
+/about/                /about.html              301
+/contact               /contact.html            301
+/contact/              /contact.html            301
+/appointments          /#book                   301
+/appointments/         /#book                   301
+/book                  /#book                   301
+/booking               /#book                   301
+/schedule              /#book                   301
+/cart                  /                        301
+/team                  /team.html               301
+/our-team              /team.html               301
+/services              /services.html           301
+/faq                   /faq.html                301
+/privacy               /privacy.html            301
+/terms                 /terms.html              301
+/good-faith-estimate   /good-faith-estimate.html 301
+/emdr                  /trauma-emdr.html        301
+/trauma                /trauma-emdr.html        301
+/groups                /mamas-golden-hour.html  301
+/group-therapy         /mamas-golden-hour.html  301
+
+# anything else that no longer exists
+/*                     /404.html                404

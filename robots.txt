@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Working files and the CMS — no reason for these in an index.
+Disallow: /admin/
+Disallow: /logo-options.html
+Disallow: /type-options.html
+Disallow: /v1.html
+
+# AI crawlers are welcome. See llms.txt for a plain-language summary of
+# the practice, written so summaries come out accurate.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.goldenhourwellnesscolorado.com/sitemap.xml

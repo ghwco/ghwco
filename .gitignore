@@ -1,0 +1,13 @@
+node_modules/
+__pycache__/
+*.pyc
+.env
+.env.local
+
+# Tina build artefacts. admin/ IS committed — it's the editor Shayla opens —
+# but these two are regenerated on every build and only cause merge noise.
+tina/__generated__/
+tina/tina-lock.json
+.tina/
+
+.DS_Store
