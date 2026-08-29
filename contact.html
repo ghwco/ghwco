@@ -472,10 +472,6 @@
       from_phone:         form.phone.value || 'Not given',
       contact_preference: form.interest ? form.interest.value : '',
       inquiry_type:       form.interest ? form.interest.value : 'General inquiry',
-      // The saved EmailJS template still refers to {{enquiry_type}}. Sending
-      // both spellings means the field renders whichever the template uses,
-      // so a copy edit in the dashboard can never silently blank it out.
-      enquiry_type:       form.interest ? form.interest.value : 'General inquiry',
       insurance:          form.insurance.value || 'Not given',
       message:            form.message.value,
       // NOTE: this does NOT control where the notification goes. Routing is
