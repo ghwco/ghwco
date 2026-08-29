@@ -17,8 +17,7 @@
 /cart                  /                          301
 /insurance             /faq#insurance             301
 /insurance/            /faq#insurance             301
-/blog                  /blog.html                 301
-/journal               /blog.html                 301
+/journal               /blog                      301
 /our-team              /team                      301
 /emdr                  /trauma-emdr               301
 /trauma                /trauma-emdr               301
