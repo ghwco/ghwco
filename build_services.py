@@ -291,9 +291,9 @@ emit("mamas-golden-hour.html",
     </figure>
 
     <h2>What a session looks like</h2>
-    <p>Ninety minutes, the same small group of women each week, the same two facilitators. There&rsquo;s a loose theme most weeks, but it gives way if something more pressing is in the room. This is a therapy group, not a class — nobody presents, and there&rsquo;s no homework.</p>
+    <p>Sixty minutes, the same small group of women each week, the same two facilitators. There&rsquo;s a loose theme most weeks, but it gives way if something more pressing is in the room. This is a therapy group, not a class — nobody presents, and there&rsquo;s no homework.</p>
     <p>You are never required to speak. Plenty of people spend the first week listening and find that useful on its own. What is asked of everyone is confidentiality: what&rsquo;s said in the group stays in the group.</p>
-    <p>Babies in arms are welcome on screen. Cameras on where you can manage it, because it makes a real difference to how connected the group feels, but we&rsquo;d rather have you there with the camera off than not there at all.</p>
+    <p>Babies in arms are welcome on screen, and you&rsquo;re welcome to breastfeed during the session to whatever degree you&rsquo;re comfortable &mdash; camera on, camera off, however suits you. Cameras on where you can manage it, because it makes a real difference to how connected the group feels, but we&rsquo;d rather have you there with the camera off than not there at all.</p>
 
     <h2>Why a group and not individual therapy</h2>
     <p>A lot of what makes new motherhood hard is the conviction that everyone else is finding it easier. That belief is remarkably resistant to a therapist telling you otherwise, and it tends to dissolve the first time another mother says the thing out loud.</p>
