@@ -15,6 +15,8 @@
 /booking               /#book                     301
 /schedule              /#book                     301
 /cart                  /                          301
+/home                  /                          301
+/store                 /                          301
 /insurance             /faq#insurance             301
 /insurance/            /faq#insurance             301
 /journal               /blog                      301

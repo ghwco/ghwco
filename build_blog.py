@@ -115,6 +115,7 @@ for p in live:
          title="%s | Golden Hour Wellness Colorado" % p["title"],
          desc=p.get("excerpt", "")[:180],
          body=body, active="blog.html",
+         img=p.get("heroImage") or "assets/img/hero.jpg",
          extra_head='<script type="application/ld+json">%s</script>' % json.dumps(ld))
 
 # ── Index ────────────────────────────────────────────────────────────────

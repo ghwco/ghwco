@@ -249,6 +249,7 @@ emit("mamas-golden-hour.html",
   title="Mama&rsquo;s Golden Hour | Therapy Group for Colorado Moms",
   desc=f"A six-week virtual therapy group for Colorado mothers, covering fertility, pregnancy, postpartum and parenting. Next cohort begins {G['startDateShort']}.",
   active="services.html",
+  img="assets/img/mamas-group.jpg",
   extra_head=f'<script type="application/ld+json">{json.dumps(group_ld)}</script>',
   body=head_block("Group therapy", "Mama&rsquo;s Golden Hour",
     "A six-week virtual therapy group for mothers across Colorado, co-facilitated by Shayla and Ashley.") + f'''

@@ -218,8 +218,9 @@ PAGE_CSS = '''
 '''
 
 
-def page(slug, title, desc, body, extra_head="", active=None, extra_css=""):
+def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img="assets/img/hero.jpg"):
     canon = f"{SITE}/" if slug == "index.html" else f"{SITE}/{slug}"
+    img_abs = img if img.startswith("http") else f"{SITE}/{img}"
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -235,7 +236,9 @@ def page(slug, title, desc, body, extra_head="", active=None, extra_css=""):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canon}">
+<meta property="og:image" content="{img_abs}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{img_abs}">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
