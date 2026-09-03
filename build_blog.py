@@ -63,7 +63,7 @@ def human_date(iso):
         y, m, d = iso.split("-")
         months = ["January", "February", "March", "April", "May", "June", "July",
                   "August", "September", "October", "November", "December"]
-        return "%d %s %s" % (int(d), months[int(m) - 1], y)
+        return "%s %d, %s" % (months[int(m) - 1], int(d), y)
     except Exception:
         return iso
 
