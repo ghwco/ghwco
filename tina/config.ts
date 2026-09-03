@@ -216,7 +216,7 @@ export default defineConfig({
           published: false,
           date: new Date().toISOString().slice(0, 10),
           author: "Shayla Martinez-O'Brien, LPC",
-          heroImage: "assets/img/blog-emdr.jpg",
+          heroImage: "blog-emdr.jpg",
         }),
         ui: {
           filename: {

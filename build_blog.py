@@ -58,6 +58,17 @@ def post_url(p):
     return "blog-%s.html" % p["slug"]
 
 
+def hero_path(p):
+    """Full site-relative path to a post's hero image.
+
+    Tina's media picker is rooted at assets/img (see tina/config.ts), so it
+    stores and expects just the filename there — not the full path. The
+    generator is what needs the full path, so it adds the prefix back on
+    here rather than the content JSON carrying it twice."""
+    name = p.get("heroImage", "hero.jpg")
+    return name if "/" in name else "assets/img/%s" % name
+
+
 def human_date(iso):
     try:
         y, m, d = iso.split("-")
@@ -85,7 +96,7 @@ for p in live:
           "headline": p["title"],
           "datePublished": p.get("date"),
           "description": p.get("excerpt", ""),
-          "image": "%s/%s" % (SITE, p.get("heroImage", "")),
+          "image": "%s/%s" % (SITE, hero_path(p)),
           "author": {"@type": "Person", "name": p.get("author", "Golden Hour Wellness Colorado")},
           "publisher": {"@type": "MedicalBusiness",
                         "name": "Golden Hour Wellness Colorado, LLC"},
@@ -109,13 +120,13 @@ for p in live:
 
     <p style="margin-top:2rem"><a href="blog.html">&larr; All posts</a></p>
   </div>
-</section>''' % (p.get("heroImage", ""), p.get("heroAlt", ""), render_body(p.get("body", []))) + cta()
+</section>''' % (hero_path(p), p.get("heroAlt", ""), render_body(p.get("body", []))) + cta()
 
     emit(post_url(p),
          title="%s | Golden Hour Wellness Colorado" % p["title"],
          desc=p.get("excerpt", "")[:180],
          body=body, active="blog.html",
-         img=p.get("heroImage") or "assets/img/hero.jpg",
+         img=hero_path(p),
          extra_head='<script type="application/ld+json">%s</script>' % json.dumps(ld))
 
 # ── Index ────────────────────────────────────────────────────────────────
@@ -129,7 +140,7 @@ if live:
           <p>%s</p>
           <span class="more">Read more &rarr;</span>
         </div>
-      </a>''' % (post_url(p), p.get("heroImage", ""), human_date(p.get("date", "")),
+      </a>''' % (post_url(p), hero_path(p), human_date(p.get("date", "")),
                  p["title"], p.get("excerpt", "")) for p in live)
     inner = '<div class="cards postcards">%s</div>' % cards
 else:
