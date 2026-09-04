@@ -478,14 +478,21 @@
       return;
     }
 
+    var PREFER_LABELS = { email: 'Email', phone: 'Phone call', text: 'Text' };
+    var preferInput = form.querySelector('input[name="prefer"]:checked');
+    var preferLabel = preferInput ? (PREFER_LABELS[preferInput.value] || preferInput.value) : 'Not sure yet';
+
     var params = {
       from_name:          [form.first.value, form.last.value].join(' ').trim(),
       from_email:         form.email.value,
       from_phone:         form.phone.value || 'Not given',
-      contact_preference: form.interest ? form.interest.value : '',
+      contact_preference: preferLabel,
       inquiry_type:       form.interest ? form.interest.value : 'General inquiry',
       insurance:          form.insurance.value || 'Not given',
-      message:            form.message.value,
+      message:            form.message.value || 'No additional message provided.',
+      consent:            consent.checked
+                            ? 'Yes — confirmed this isn’t a secure channel'
+                            : 'Not confirmed',
       // NOTE: this does NOT control where the notification goes. Routing is
       // the template's "To Email" field in the EmailJS dashboard. Kept only
       // so the address is available inside the template if ever needed.

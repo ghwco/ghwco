@@ -15,6 +15,12 @@
   NOTE ON PHI: the form deliberately does not collect health information,
   and this template carries a reminder to move clinical detail to a secure
   channel. Consumer Gmail is not covered by a BAA.
+
+  NOTE ON AUTO-REPLY: leave this template's Auto-Reply tab UNLINKED in the
+  EmailJS dashboard. contact.html already sends the client-facing confirmation
+  as a second, explicit emailjs.send() call (see template-autoreply.html). If
+  both the dashboard's native Auto-Reply AND the code's manual send are active
+  at once, the client receives two confirmation emails.
 -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F4EBE1;margin:0;padding:24px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
   <tr>
@@ -72,6 +78,10 @@
               <tr>
                 <td style="padding:11px 0;border-bottom:1px solid #EFE8DF;color:#8B857E;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;">Insurance</td>
                 <td style="padding:11px 0;border-bottom:1px solid #EFE8DF;">{{insurance}}</td>
+              </tr>
+              <tr>
+                <td style="padding:11px 0;color:#8B857E;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;">Consent</td>
+                <td style="padding:11px 0;">{{consent}}</td>
               </tr>
             </table>
           </td>
