@@ -18,6 +18,22 @@ PHONE_HREF = "tel:+13037369822"
 PHONE = "(303) 736-9822"
 EMAIL = "goldenhourwellco@gmail.com"
 
+# Google Analytics 4 (GA4) — property "Golden Hour Wellness Colorado",
+# measurement ID G-14KQ8308P5. Must be the first thing after <head> so it
+# starts capturing before anything else loads. Same snippet on every page,
+# generated or hand-written (index.html, contact.html, 404.html carry it too
+# since build_pages.py doesn't touch those — keep all four in sync if this
+# ID ever changes).
+GA_TAG = '''<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-14KQ8308P5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-14KQ8308P5');
+</script>'''
+
 MARK = '''<svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
         <defs>
           <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F3CB80"/><stop offset="100%" stop-color="#DE9855"/></linearGradient>
@@ -224,6 +240,7 @@ def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img=
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
+{GA_TAG}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
