@@ -1,11 +1,11 @@
 {
+  "published": true,
   "title": "What EMDR actually feels like",
   "slug": "what-emdr-feels-like",
-  "published": true,
-  "date": "2026-08-18",
+  "date": "2026-08-18T00:00:00.000Z",
   "author": "Shayla Martinez-O'Brien, LPC",
   "excerpt": "People often arrive expecting something dramatic. It is quieter and more ordinary than that, and the ordinariness is part of why it works.",
-  "heroImage": "blog-emdr.jpg",
+  "heroImage": "/assets/img/blog-emdr.jpg",
   "heroAlt": "Low sunlight through a stand of tall pines, falling across a quiet path.",
   "body": [
     "The most common question I get in a first session is some version of: what is this going to feel like? Usually underneath it is a more specific worry — that EMDR means being made to relive the worst thing that ever happened to you, in detail, out loud, in front of a stranger.",
