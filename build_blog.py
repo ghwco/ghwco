@@ -71,7 +71,8 @@ def hero_path(p):
 
 def human_date(iso):
     try:
-        y, m, d = iso.split("-")
+        date_part = iso[:10]
+        y, m, d = date_part.split("-")
         months = ["January", "February", "March", "April", "May", "June", "July",
                   "August", "September", "October", "November", "December"]
         return "%s %d, %s" % (months[int(m) - 1], int(d), y)
