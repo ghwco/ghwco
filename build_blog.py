@@ -15,7 +15,7 @@ so un-publishing genuinely removes the page rather than leaving the last build
 behind.
 """
 import io, os, glob, json, re
-from build_pages import page, head_block, cta, SITE
+from build_pages import page, head_block, cta, SITE, clean_url
 
 OUT = []
 
@@ -101,7 +101,7 @@ for p in live:
           "author": {"@type": "Person", "name": p.get("author", "Golden Hour Wellness Colorado")},
           "publisher": {"@type": "MedicalBusiness",
                         "name": "Golden Hour Wellness Colorado, LLC"},
-          "mainEntityOfPage": "%s/%s" % (SITE, post_url(p))}
+          "mainEntityOfPage": clean_url(post_url(p))}
 
     body = head_block("Journal", p["title"],
                       "%s &middot; %s" % (human_date(p.get("date", "")), p.get("author", ""))) + '''
@@ -167,10 +167,10 @@ emit("blog.html",
 # without going stale. Everything between the markers is regenerated here.
 START, END = "  <!-- blog:start -->", "  <!-- blog:end -->"
 sm = io.open("sitemap.xml", encoding="utf-8").read()
-rows = ['  <url><loc>%s/blog.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>' % SITE]
+rows = ['  <url><loc>%s</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>' % clean_url("blog.html")]
 for p_ in live:
-    rows.append('  <url><loc>%s/%s</loc><lastmod>%s</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>'
-                % (SITE, post_url(p_), p_.get("date", "")))
+    rows.append('  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>'
+                % (clean_url(post_url(p_)), p_.get("date", "")))
 block = START + "\n" + "\n".join(rows) + "\n" + END
 if START in sm and END in sm:
     sm = re.sub(re.escape(START) + r".*?" + re.escape(END), block.replace("\\", "\\\\"), sm, flags=re.S)

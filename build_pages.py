@@ -234,8 +234,26 @@ PAGE_CSS = '''
 '''
 
 
+def clean_url(slug):
+    """Absolute, actually-served URL for a page's on-disk filename.
+
+    Cloudflare Pages serves clean URLs: /about.html 308-redirects to /about,
+    and index.html *is* the site root. Canonical tags, og:url and the
+    sitemap all have to point at the URL that returns 200 — not the on-disk
+    filename — or Google gets a "index this / it redirects / but its
+    canonical says index it anyway" contradiction. This is the one place
+    that mapping happens, so every caller (page(), the sitemap, blog posts)
+    stays in agreement automatically.
+    """
+    if slug == "index.html":
+        return f"{SITE}/"
+    if slug.endswith(".html"):
+        slug = slug[:-5]
+    return f"{SITE}/{slug}"
+
+
 def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img="assets/img/hero.jpg"):
-    canon = f"{SITE}/" if slug == "index.html" else f"{SITE}/{slug}"
+    canon = clean_url(slug)
     img_abs = img if img.startswith("http") else f"{SITE}/{img}"
     return f'''<!DOCTYPE html>
 <html lang="en">
