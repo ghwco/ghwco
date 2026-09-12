@@ -29,3 +29,7 @@
 
 # No catch-all. Cloudflare Pages serves 404.html for unmatched paths on its
 # own; a "/* -> /404.html" rule here intercepts real pages before they resolve.
+
+# www/non-www: canonical tag says www, but nothing enforces it server-side,
+# so both versions serve live and Google treats non-www as a duplicate.
+https://goldenhourwellnesscolorado.com/* https://www.goldenhourwellnesscolorado.com/:splat 301
