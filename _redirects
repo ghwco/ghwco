@@ -32,4 +32,10 @@
 
 # www/non-www: canonical tag says www, but nothing enforces it server-side,
 # so both versions serve live and Google treats non-www as a duplicate.
-https://goldenhourwellnesscolorado.com/* https://www.goldenhourwellnesscolorado.com/:splat 301
+# The trailing "!" is load-bearing. Without it this rule silently never fired,
+# and non-www served the entire site with a 200 alongside the www copy. Google
+# noticed: URL inspection on /about showed a user-declared canonical of www but
+# a Google-SELECTED canonical of non-www — Google was overriding the canonical
+# tags and indexing the other hostname. "!" forces the redirect to win over a
+# matching static file.
+https://goldenhourwellnesscolorado.com/* https://www.goldenhourwellnesscolorado.com/:splat 301!
