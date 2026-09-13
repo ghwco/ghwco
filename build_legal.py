@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """FAQ + legal pages.  python3 build_legal.py"""
 import io, json
-from build_pages import page, head_block, cta, SITE
+from build_pages import page, head_block, cta, SITE, titled
 
 OUT = []
 def emit(slug, **kw):
@@ -23,7 +23,7 @@ items = "".join(
   f'<details><summary>{q}</summary><div class="a">{a}</div></details>' for q, a in QA)
 
 emit("faq.html",
-  title="Frequently Asked Questions | Golden Hour Wellness Colorado",
+  title=titled("Frequently Asked Questions"),
   desc="Insurance, rates and answers about telehealth, EMDR, scheduling and getting started with Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna.",
   extra_head=f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>',
   body=head_block("FAQ", "Insurance, rates and the questions people ask first.",
@@ -71,7 +71,7 @@ emit("faq.html",
 
 # ─────────────────────────────────────────────── PRIVACY
 emit("privacy.html",
-  title="Privacy Policy | Golden Hour Wellness Colorado",
+  title=titled("Privacy Policy"),
   desc="How Golden Hour Wellness Colorado collects, uses and protects information submitted through this website, and why not to send health details.",
   body=head_block("Legal", "Privacy Policy", f"Last updated {UPDATED}.") + f'''
 <section class="section">
@@ -117,7 +117,7 @@ emit("privacy.html",
 
 # ─────────────────────────────────────────────── TERMS
 emit("terms.html",
-  title="Terms &amp; Conditions | Golden Hour Wellness Colorado",
+  title=titled("Terms &amp; Conditions"),
   desc="Terms of use for the Golden Hour Wellness Colorado website, including scheduling, licensure, third-party tools and limitations of liability.",
   body=head_block("Legal", "Terms &amp; Conditions", f"Last updated {UPDATED}.") + '''
 <section class="section">
@@ -158,7 +158,7 @@ emit("terms.html",
 
 # ─────────────────────────────────────────────── GFE
 emit("good-faith-estimate.html",
-  title="Good Faith Estimate | Golden Hour Wellness Colorado",
+  title=titled("Good Faith Estimate"),
   desc="Your right to a Good Faith Estimate of expected charges under the No Surprises Act, and how to request one from Golden Hour Wellness Colorado.",
   body=head_block("Your rights", "Good Faith Estimate",
     "Under the No Surprises Act you have the right to know what your care will cost before you begin.") + '''

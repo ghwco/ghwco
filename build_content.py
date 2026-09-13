@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Page content + writer. Run:  python3 build_content.py"""
 import io, json
-from build_pages import page, head_block, cta, SITE
+from build_pages import page, head_block, cta, SITE, titled
 
 W = lambda slug, html: io.open(slug, "w", encoding="utf-8").write(html)
 OUT = []
@@ -11,7 +11,7 @@ def emit(slug, **kw):
 
 # ─────────────────────────────────────────────── ABOUT
 emit("about.html",
-  title="About | Golden Hour Wellness Colorado",
+  title=titled("About"),
   desc="A therapist-owned counseling practice in Colorado specializing in trauma, EMDR and addiction counseling. Founded by Shayla Martinez-O'Brien, LPC.",
   body=head_block("About", "A practice built around the person in the room.",
        "Golden Hour Wellness Colorado, LLC is a small, therapist-owned counseling practice serving clients across the state.") + '''
@@ -49,7 +49,7 @@ emit("about.html",
 
 # ─────────────────────────────────────────────── TEAM
 emit("team.html",
-  title="Our Team | Golden Hour Wellness Colorado",
+  title=titled("Our Team"),
   desc="Meet the clinicians at Golden Hour Wellness Colorado: Shayla Martinez-O'Brien LPC, Chrissie Flynn-Weirich LAC, and Ashley LeRossignol LPC.",
   body=head_block("Our team", "Three clinicians. Roughly 34 years of practice between them.") + '''
 <section class="section">
@@ -116,7 +116,7 @@ def profile(slug, name, cred, img, w, h, tags, lead, paras, bookable, extra_meta
     </div>
   </div>
 </section>'''
-    emit(slug, title=f"{name} | Golden Hour Wellness Colorado",
+    emit(slug, title=titled(name),
          desc=lead[:180], body=body, active="team.html",
          extra_head=f'<script type="application/ld+json">{json.dumps(person)}</script>')
 

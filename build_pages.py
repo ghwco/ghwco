@@ -252,6 +252,71 @@ def clean_url(slug):
     return f"{SITE}/{slug}"
 
 
+
+# ── Structured data ──────────────────────────────────────────────────────────
+# Seven generated pages shipped with no structured data at all, so Google had
+# nothing but raw HTML to work with. Every generated page now carries a
+# WebPage-family node pointing at ONE business entity (#business, declared on
+# index.html) so the site reads as a single organization rather than a pile of
+# unrelated pages. Hand-editing the generated .html is pointless — this script
+# overwrites them on every build — so the schema lives here.
+BUSINESS_ID = SITE + "/#business"
+
+SCHEMA_TYPE = {
+    "about.html":               ("AboutPage", "About Golden Hour Wellness Colorado"),
+    "team.html":                ("AboutPage", "Our Team"),
+    "services.html":            ("WebPage",   "Therapy Services"),
+    "blog.html":                ("Blog",      "Golden Hour Wellness Colorado Journal"),
+    "faq.html":                 ("FAQPage",   "Frequently Asked Questions"),
+    "privacy.html":             ("WebPage",   "Privacy Policy"),
+    "terms.html":               ("WebPage",   "Terms & Conditions"),
+    "good-faith-estimate.html": ("WebPage",   "Good Faith Estimate"),
+}
+
+
+
+BRAND = "Golden Hour Wellness Colorado"
+BRAND_SHORT = "Golden Hour Wellness"
+
+
+def titled(t, limit=60):
+    """Append the brand only while the title still fits in a search result.
+
+    Google cuts titles around 60 characters. "| Golden Hour Wellness Colorado"
+    is 31 of them, which is why several post titles were being truncated
+    mid-sentence. Try the full brand, then the short one, then no brand at all
+    (Google appends the site name itself anyway)."""
+    for suffix in (" | " + BRAND, " | " + BRAND_SHORT, ""):
+        if len(t) + len(suffix) <= limit:
+            return t + suffix
+    return t
+
+
+def schema_for(slug, title, desc, canon):
+    """Return a <script type=application/ld+json> block for this page, or ""."""
+    import json as _json
+    if slug not in SCHEMA_TYPE:
+        return ""
+    typ, name = SCHEMA_TYPE[slug]
+    node = {
+        "@context": "https://schema.org",
+        "@type": typ,
+        "@id": canon + "#webpage",
+        "url": canon,
+        "name": name,
+        "description": desc,
+        "inLanguage": "en-US",
+        "isPartOf": {"@type": "WebSite",
+                     "name": "Golden Hour Wellness Colorado",
+                     "url": SITE + "/"},
+        "about": {"@id": BUSINESS_ID},
+        "publisher": {"@id": BUSINESS_ID},
+    }
+    return ('<script type="application/ld+json">\n'
+            + _json.dumps(node, indent=2, ensure_ascii=False)
+            + '\n</script>\n')
+
+
 def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img="assets/img/hero.jpg"):
     canon = clean_url(slug)
     img_abs = img if img.startswith("http") else f"{SITE}/{img}"
@@ -280,7 +345,7 @@ def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img=
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/brand.css">
 {extra_head}
-<style>{PAGE_CSS}{extra_css}</style>
+{schema_for(slug, title, desc, canon)}<style>{PAGE_CSS}{extra_css}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>

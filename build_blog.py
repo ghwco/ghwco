@@ -15,7 +15,7 @@ so un-publishing genuinely removes the page rather than leaving the last build
 behind.
 """
 import io, os, glob, json, re
-from build_pages import page, head_block, cta, SITE, clean_url
+from build_pages import page, head_block, cta, SITE, clean_url, titled
 
 OUT = []
 
@@ -124,7 +124,7 @@ for p in live:
 </section>''' % (hero_path(p), p.get("heroAlt", ""), render_body(p.get("body", []))) + cta()
 
     emit(post_url(p),
-         title="%s | Golden Hour Wellness Colorado" % p["title"],
+         title=titled(p["title"]),
          desc=p.get("excerpt", "")[:180],
          body=body, active="blog.html",
          img=hero_path(p),
@@ -149,7 +149,7 @@ else:
              'New writing will appear on this page.</p></div>')
 
 emit("blog.html",
-     title="Journal | Golden Hour Wellness Colorado",
+     title=titled("Journal"),
      desc="Writing on trauma, EMDR, anxiety and everyday mental health from the "
           "clinicians at Golden Hour Wellness Colorado.",
      body=head_block("Journal", "Notes from the practice.",
