@@ -267,7 +267,7 @@ SCHEMA_TYPE = {
     "team.html":                ("AboutPage", "Our Team"),
     "services.html":            ("WebPage",   "Therapy Services"),
     "blog.html":                ("Blog",      "Golden Hour Wellness Colorado Journal"),
-    "faq.html":                 ("FAQPage",   "Frequently Asked Questions"),
+    "faq.html":                 ("WebPage",   "Frequently Asked Questions"),  # FAQPage node comes from build_legal.py; two FAQPage blocks is a Search Console error
     "privacy.html":             ("WebPage",   "Privacy Policy"),
     "terms.html":               ("WebPage",   "Terms & Conditions"),
     "good-faith-estimate.html": ("WebPage",   "Good Faith Estimate"),
