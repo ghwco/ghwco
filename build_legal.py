@@ -24,7 +24,7 @@ items = "".join(
 
 emit("faq.html",
   title=titled("Frequently Asked Questions"),
-  desc="Insurance, rates and answers about telehealth, EMDR, scheduling and getting started with Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna.",
+  desc="Insurance, rates, telehealth, EMDR and scheduling at Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna.",
   extra_head=f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>',
   body=head_block("FAQ", "Insurance, rates and the questions people ask first.",
     "If yours isn&rsquo;t here, just ask. We&rsquo;d rather answer it than have it stop you.") + f'''
