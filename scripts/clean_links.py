@@ -15,10 +15,16 @@ def fix(m):
     q, slug, frag = m.group(1), m.group(2), m.group(3) or ""
     return "href=%s%s%s%s" % (q, "/" if slug == "index" else "/" + slug, frag, q)
 
+# Schema and meta use absolute URLs; those must match the canonical too.
+ABS = re.compile(r'(https://www\.goldenhourwellnesscolorado\.com/)([A-Za-z0-9_-]+)\.html\b')
+
+def fix_abs(m):
+    return m.group(1) + ("" if m.group(2) == "index" else m.group(2))
+
 changed = 0
 for f in glob.glob(os.path.join(ROOT, "*.html")):
     s = open(f, encoding="utf-8").read()
-    n = PAT.sub(fix, s)
+    n = ABS.sub(fix_abs, PAT.sub(fix, s))
     if n != s:
         open(f, "w", encoding="utf-8").write(n)
         changed += 1
