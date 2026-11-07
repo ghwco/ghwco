@@ -143,7 +143,7 @@ FOOTER = f'''<footer class="footer">
   </div>
   <div class="wrap footer__bar">
     <span>&copy; <span id="yr">2026</span> Golden Hour Wellness Colorado, LLC</span>
-    <span>Licensed in the State of Colorado &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a> &middot; <a href="good-faith-estimate.html">Good Faith Estimate</a></span>
+    <span>Licensed in the State of Colorado &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a> &middot; <a href="good-faith-estimate.html">Good Faith Estimate</a> &middot; Website by <a href="https://therapistweb.design/" rel="noopener">Therapist Web Design</a></span>
   </div>
 </footer>'''
 
