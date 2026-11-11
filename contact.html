@@ -159,7 +159,7 @@
 
 <section class="page-head">
   <!-- .wrap and .measure must NOT share an element: .wrap sets margin-inline:auto,
-       so a max-width on the same node centres the block instead of left-aligning it. -->
+       so a max-width on the same node centers the block instead of left-aligning it. -->
   <div class="wrap">
     <div class="measure">
       <p class="eyebrow">Contact</p>
@@ -175,28 +175,29 @@
     <!-- ================= FORM ================= -->
     <div>
       <!--
-        HIPAA POSTURE — read before changing anything here.
+        HIPAA POSTURE: read before changing anything here.
 
-        This form is intentionally NOT a clinical intake. EmailJS is not a
-        HIPAA business associate and consumer Gmail carries no BAA, so no
+        This form is intentionally NOT a clinical intake. It posts to
+        /api/contact, which emails the practice through Resend. Resend is not
+        a HIPAA business associate and consumer Gmail carries no BAA, so no
         Protected Health Information should ever travel through this path.
 
         The safeguards below are deliberate:
           1. No field invites clinical detail. "What brings you here" is a
              fixed dropdown of non-diagnostic categories, not free text.
           2. The message box is capped at 300 characters and labeled with
-             an explicit do-not-include warning — short enough to arrange a
+             an explicit do-not-include warning, short enough to arrange a
              call, too short to become a history.
           3. An explicit consent checkbox gates submission, so the client
              affirms they understand the channel isn't secure.
-          4. Honeypot + timing check for spam (EmailJS public keys are
-             visible in the page by design).
+          4. Honeypot + timing check for spam, repeated server-side for
+             the honeypot and the field lists.
           5. Nothing is stored client-side. No localStorage, no analytics
              on field values.
 
         Anything clinical belongs in Acuity intake or her EHR portal.
         If she ever wants real intake here, that needs a BAA-covered form
-        provider — it is not a CSS change.
+        provider. It is not a CSS change.
       -->
       <div class="privacy-note">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M9.5 12.2l1.8 1.8 3.4-3.6"/></svg>
@@ -398,15 +399,21 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>
-  // Replace with the public key from EmailJS \u2192 Account \u2192 General.
-  if (typeof emailjs !== "undefined") { try { emailjs.init({ publicKey: "4kZZJo5E8VJGKzGGg" }); } catch (e) {} }
-</script>
 <script src="assets/site.js"></script>
 <script>
 (function () {
   'use strict';
+  // Inquiries post to /api/contact (functions/api/contact.js), which sends
+  // them through Resend. No third-party script loads on this page.
+  var ENDPOINT = '/api/contact';
+  var FALLBACK = 'Sorry, your message didn\u2019t go through. Please call or text ' +
+    '<a href="tel:+13037369822">(303)&nbsp;736-9822</a> or email ' +
+    '<a href="mailto:goldenhourwellco@gmail.com">goldenhourwellco@gmail.com</a>.';
+  var SUCCESS = 'Thanks, your message is on its way. We\u2019ll reply within one business day. ' +
+    'If you don\u2019t hear back within one business day, please call ' +
+    '<a href="tel:+13037369822">(303)&nbsp;736-9822</a> or email ' +
+    '<a href="mailto:goldenhourwellco@gmail.com">goldenhourwellco@gmail.com</a>.';
+
   var form    = document.getElementById('contactForm');
   var consent = document.getElementById('consent');
   var btn     = document.getElementById('submitBtn');
@@ -424,15 +431,15 @@
     counter.classList.toggle('over', n > 280);
   });
 
-  function say(kind, text) {
+  function say(kind, text, html) {
     status.className = 'form-status show ' + kind;
-    status.textContent = text;
+    if (html) { status.innerHTML = text; } else { status.textContent = text; }
   }
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // honeypot — real people never see this field
+    // honeypot: real people never see this field
     if (document.getElementById('website').value) return;
     // bots submit near-instantly
     if (Date.now() - loadedAt < 3000) {
@@ -446,85 +453,52 @@
     }
 
     btn.disabled = true;
-    btn.textContent = 'Sending…';
+    btn.textContent = 'Sending\u2026';
 
-    // ------------------------------------------------------------------
-    // EmailJS. The public key is meant to be visible in page source — what
-    // stops it becoming a spam relay is the domain allowlist and CAPTCHA set
-    // in the EmailJS dashboard, not secrecy. Fill in the three IDs below.
-    //
-    // HIPAA: this routes to Gmail, which is not covered by a BAA. The form
-    // is designed to collect contact details only, and the notice above the
-    // fields asks people to keep health detail out of it. That is mitigation,
-    // not compliance — a BAA-covered inbox is the real fix.
-    // ------------------------------------------------------------------
-    var CFG = {
-      publicKey:  '4kZZJo5E8VJGKzGGg',
-      serviceId:  'service_0z3erja',
-      templateId: 'template_ql76otu',          // the notification template
-      autoReplyId: 'template_tkcx2rd' // sends the confirmation to the inquirer
+    var preferInput = form.querySelector('input[name="prefer"]:checked');
+    var turnstile = form.querySelector('[name="cf-turnstile-response"]');
+    var payload = {
+      first:     form.first.value,
+      last:      form.last.value,
+      email:     form.email.value,
+      phone:     form.phone.value,
+      prefer:    preferInput ? preferInput.value : 'email',
+      interest:  form.interest.value,
+      insurance: form.insurance.value,
+      message:   form.message.value,
+      consent:   consent.checked,
+      website:   document.getElementById('website').value,
+      'cf-turnstile-response': turnstile ? turnstile.value : ''
     };
 
-    function done(ok) {
-      btn.textContent = 'Send message';
-      if (ok) {
-        say('ok', 'Thanks, your message is on its way. We\u2019ll reply within one business day.');
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (out) {
+          if (!res.ok || !out.ok) {
+            // A 400 with a message means something in the form needs fixing.
+            // Anything else means delivery failed, so show the phone and email.
+            var err = new Error(out.error || 'Request failed');
+            err.fixable = res.status === 400 && Boolean(out.error);
+            throw err;
+          }
+        });
+      })
+      .then(function () {
+        btn.textContent = 'Send message';
+        say('ok', SUCCESS, true);
         form.reset();
         counter.textContent = '0 / 300';
         btn.disabled = true;
-      } else {
-        btn.disabled = false;
-        say('err', 'Something went wrong sending that. Please call or text (303) 736-9822, ' +
-                   'or email goldenhourwellco@gmail.com directly.');
-      }
-    }
-
-    if (typeof emailjs === 'undefined' || !CFG.publicKey) {
-      // Not configured yet — fail loudly in the console rather than showing
-      // the visitor a success message for an email that never sent.
-      console.error('EmailJS is not configured. Message was NOT sent.');
-      done(false);
-      return;
-    }
-
-    var PREFER_LABELS = { email: 'Email', phone: 'Phone call', text: 'Text' };
-    var preferInput = form.querySelector('input[name="prefer"]:checked');
-    var preferLabel = preferInput ? (PREFER_LABELS[preferInput.value] || preferInput.value) : 'Not sure yet';
-
-    var params = {
-      from_name:          [form.first.value, form.last.value].join(' ').trim(),
-      from_email:         form.email.value,
-      from_phone:         form.phone.value || 'Not given',
-      contact_preference: preferLabel,
-      inquiry_type:       form.interest ? form.interest.value : 'General inquiry',
-      insurance:          form.insurance.value || 'Not given',
-      message:            form.message.value || 'No additional message provided.',
-      consent:            consent.checked
-                            ? 'Yes — confirmed this isn’t a secure channel'
-                            : 'Not confirmed',
-      // NOTE: this does NOT control where the notification goes. Routing is
-      // the template's "To Email" field in the EmailJS dashboard. Kept only
-      // so the address is available inside the template if ever needed.
-      to_email:           'goldenhourwellco@gmail.com',
-      sent_at:            new Date().toLocaleString('en-US', {
-                            timeZone: 'America/Denver',
-                            dateStyle: 'medium', timeStyle: 'short'
-                          }) + ' MT'
-    };
-
-    emailjs.send(CFG.serviceId, CFG.templateId, params)
-      .then(function () {
-        done(true);
-        // Auto-reply is best-effort. If it fails the inquiry still arrived,
-        // so we never surface that error to the visitor.
-        if (CFG.autoReplyId) {
-          emailjs.send(CFG.serviceId, CFG.autoReplyId, params)
-            .catch(function (e) { console.warn('Auto-reply failed:', e); });
-        }
       })
       .catch(function (err) {
-        console.error('EmailJS send failed:', err);
-        done(false);
+        console.error('Contact form send failed:', err);
+        btn.textContent = 'Send message';
+        btn.disabled = !consent.checked;
+        if (err.fixable) { say('err', err.message); } else { say('err', FALLBACK, true); }
       });
   });
 })();

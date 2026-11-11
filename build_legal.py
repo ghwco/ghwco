@@ -95,6 +95,7 @@ emit("privacy.html",
     <ul>
       <li><strong>Acuity Scheduling</strong> (a Squarespace company) powers appointment booking.</li>
       <li><strong>Thrizer</strong> powers the out-of-network benefits checker.</li>
+      <li><strong>Resend</strong> delivers contact form messages to our inbox and sends you a copy confirming we received it.</li>
       <li><strong>Google Fonts</strong> serves the typefaces used on this site.</li>
     </ul>
     <p>Information you enter into those tools is handled under their policies, not this one.</p>
