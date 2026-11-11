@@ -19,7 +19,8 @@ hand-maintaining the same markup on each one.
 ```
 build_pages.py      shared shell: header, footer, nav, page CSS
 build_content.py    about, team, and the three clinician profiles
-build_services.py   services hub + 5 service pages + the group page + telehealth
+build_services.py   services hub, service pages (incl. trauma and addiction,
+                    life transitions), the group page and telehealth
 build_legal.py      FAQ, privacy, terms, Good Faith Estimate, insurance
 apply_content.py    pushes content/home.json into index.html
 ```
@@ -143,7 +144,9 @@ overflow at 1440 / 834 / 390.
 Every page carries a canonical URL, Open Graph and Twitter tags and JSON-LD:
 `MedicalBusiness` (`#business`) on the homepage, which every other page points
 back to by `@id`; `MedicalTherapy` and `FAQPage` on service pages; `Person` on
-profiles; `Event` on the group page; `FAQPage` on the FAQ, insurance and
+profiles; `Event` on the group page (only while the cohort start date in
+`content/group.json` is still ahead, so a past cohort never ships stale event
+data) plus `FAQPage`; `FAQPage` on the FAQ, insurance and
 telehealth pages; and a `BreadcrumbList` on inner pages
 (`page(..., crumbs=[...])` in build_pages.py).
 `llms.txt` gives search and answer engines a plain-language summary so their
