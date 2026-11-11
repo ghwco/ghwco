@@ -97,7 +97,9 @@ emit("team.html",
 
 # ─────────────────────────────────────────────── PROFILES
 def profile(slug, name, cred, img, w, h, tags, lead, paras, bookable, extra_meta,
-            desc=None, seo_title=None):
+            desc=None, seo_title=None, services=()):
+    """services: (slug, label) pairs for the pages this clinician is the one
+    you'd see on. Rendered as a plain sentence of links under the bio."""
     import html as _h
     person = {"@context":"https://schema.org","@type":"Person",
               "@id":clean_url(slug) + "#person",
@@ -111,6 +113,12 @@ def profile(slug, name, cred, img, w, h, tags, lead, paras, bookable, extra_meta
             if bookable else
             '<a class="btn btn-outline" href="mamas-golden-hour.html">About the group</a>')
     meta = "".join(f"<li><b>{k}</b><span>{v}</span></li>" for k, v in extra_meta)
+    svc = ""
+    if services:
+        links = [f'<a href="{s}">{l}</a>' for s, l in services]
+        joined = links[0] if len(links) == 1 else ", ".join(links[:-1]) + " and " + links[-1]
+        svc = f'<p><strong>Services with {name.split()[0]}:</strong> {joined}.</p>\n      '
+
     body = head_block("Our team", name, cred) + f'''
 <section class="section">
   <div class="wrap bio-grid">
@@ -121,12 +129,13 @@ def profile(slug, name, cred, img, w, h, tags, lead, paras, bookable, extra_meta
     <div class="prose" style="max-width:none">
       <p class="lede">{lead}</p>
       {"".join(f"<p>{p}</p>" for p in paras)}
-      <p style="margin-top:2rem">{book}</p>
+      {svc}<p style="margin-top:2rem">{book}</p>
     </div>
   </div>
 </section>'''
     emit(slug, title=titled(seo_title or name),
          desc=desc or lead[:180], body=body, active="team.html",
+         img=f"assets/img/{img}",
          crumbs=[("Our Team", "team.html"), (_h.unescape(name), slug)],
          extra_head=f'<script type="application/ld+json">{json.dumps(person)}</script>')
 
@@ -144,7 +153,14 @@ profile("shayla.html", "Shayla Martinez-O&rsquo;Brien", "LPC &middot; Founder",
   [("License", "LPC (Colorado)"), ("Experience", "11 years"),
    ("Focus", "Trauma, EMDR, substance use"), ("Sessions", "In person &amp; telehealth")],
   desc="Shayla Martinez-O'Brien, LPC, has 11 years of practice in trauma therapy and EMDR. She founded Golden Hour Wellness and sees clients in person and by video.",
-  seo_title="Shayla Martinez-O&rsquo;Brien, LPC")
+  seo_title="Shayla Martinez-O&rsquo;Brien, LPC",
+  services=[("trauma-emdr.html", "trauma and EMDR"),
+            ("trauma-and-addiction.html", "trauma and addiction together"),
+            ("substance-use.html", "substance use"),
+            ("anxiety-depression.html", "anxiety and depression"),
+            ("couples-therapy.html", "couples"),
+            ("life-transitions-therapy.html", "life transitions"),
+            ("mamas-golden-hour.html", "Mama&rsquo;s Golden Hour")])
 
 profile("chrissie.html", "Chrissie Flynn-Weirich", "LAC &middot; Wellness Facilitator",
   "chrissie.jpg", 1086, 1357, [],
@@ -159,7 +175,12 @@ profile("chrissie.html", "Chrissie Flynn-Weirich", "LAC &middot; Wellness Facili
   [("License", "LAC (Colorado)"), ("Experience", "13+ years"),
    ("Focus", "Substance use, anxiety"), ("Sessions", "Telehealth")],
   desc="Chrissie Flynn-Weirich is a Licensed Addiction Counselor with 13+ years in substance use, anxiety and life transitions. Telehealth anywhere in Colorado.",
-  seo_title="Chrissie Flynn-Weirich, LAC")
+  seo_title="Chrissie Flynn-Weirich, LAC",
+  services=[("substance-use.html", "substance use and recovery"),
+            ("trauma-and-addiction.html", "trauma and addiction"),
+            ("anxiety-depression.html", "anxiety and depression"),
+            ("life-transitions-therapy.html", "life transitions"),
+            ("couples-therapy.html", "couples")])
 
 profile("ashley.html", "Ashley LeRossignol", "LPC &middot; Consultant &amp; group facilitator",
   "ashley.jpg", 1103, 1378, [],
