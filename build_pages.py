@@ -18,11 +18,11 @@ PHONE_HREF = "tel:+13037369822"
 PHONE = "(303) 736-9822"
 EMAIL = "goldenhourwellco@gmail.com"
 
-# Google Analytics 4 (GA4) — property "Golden Hour Wellness Colorado",
+# Google Analytics 4 (GA4), property "Golden Hour Wellness Colorado",
 # measurement ID G-14KQ8308P5. Must be the first thing after <head> so it
 # starts capturing before anything else loads. Same snippet on every page,
 # generated or hand-written (index.html, contact.html, 404.html carry it too
-# since build_pages.py doesn't touch those — keep all four in sync if this
+# since build_pages.py doesn't touch those; keep all four in sync if this
 # ID ever changes).
 GA_TAG = '''<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-14KQ8308P5"></script>
@@ -51,7 +51,7 @@ MARK = '''<svg class="brand__mark" viewBox="0 0 64 64" aria-hidden="true">
       </svg>'''
 
 # Insurance used to be an anchor into the homepage, which meant the nav item
-# scrolled you somewhere rather than taking you to a page — confusing, and it
+# scrolled you somewhere rather than taking you to a page. That was confusing, and it
 # gave the topic no URL of its own. It now lives at the top of the FAQ, which
 # is where people look for cost questions anyway.
 NAV = [("index.html", "Home"), ("about.html", "About"),
@@ -119,7 +119,8 @@ FOOTER = f'''<footer class="footer">
         <li><a href="team.html">Our Team</a></li>
         <li><a href="blog.html">Journal</a></li>
         <li><a href="faq.html">FAQ</a></li>
-        <li><a href="faq.html#insurance">Insurance &amp; rates</a></li>
+        <li><a href="insurance.html">Insurance &amp; rates</a></li>
+        <li><a href="telehealth-therapy-colorado.html">Telehealth in Colorado</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
@@ -168,7 +169,7 @@ PAGE_CSS = '''
 /* ── Orphan-row centering ─────────────────────────────────────────────
    With 5 cards in a 3-across grid the last row holds 2 and hangs left.
    Switching to a 6-column track and spanning each card 2 columns lets
-   the final pair start at column 2 and 4, which centres them under the
+   the final pair start at column 2 and 4, which centers them under the
    row above. The :nth-child/:nth-last-child pair means this only fires
    when there are exactly 5 cards, so 3- and 6-card grids are untouched. */
 @media (min-width:981px){
@@ -180,7 +181,7 @@ PAGE_CSS = '''
   .cards  > :nth-child(5):nth-last-child(1){grid-column:4 / span 2}
 }
 /* Same trick one breakpoint down. In the 2-across band a trailing odd card
-   hangs left — team.html's three profiles do exactly this on a tablet.
+   hangs left; team.html's three profiles do exactly this on a tablet.
    A 4-column track with span 2 lets that lone last card sit across 2–3.
    :nth-child(odd):nth-last-child(1) means "last card, and odd-numbered",
    which in a 2-col grid is precisely the case where it's alone in its row. */
@@ -239,8 +240,8 @@ def clean_url(slug):
 
     Cloudflare Pages serves clean URLs: /about.html 308-redirects to /about,
     and index.html *is* the site root. Canonical tags, og:url and the
-    sitemap all have to point at the URL that returns 200 — not the on-disk
-    filename — or Google gets a "index this / it redirects / but its
+    sitemap all have to point at the URL that returns 200, not the on-disk
+    filename, or Google gets a "index this / it redirects / but its
     canonical says index it anyway" contradiction. This is the one place
     that mapping happens, so every caller (page(), the sitemap, blog posts)
     stays in agreement automatically.
@@ -258,8 +259,8 @@ def clean_url(slug):
 # nothing but raw HTML to work with. Every generated page now carries a
 # WebPage-family node pointing at ONE business entity (#business, declared on
 # index.html) so the site reads as a single organization rather than a pile of
-# unrelated pages. Hand-editing the generated .html is pointless — this script
-# overwrites them on every build — so the schema lives here.
+# unrelated pages. Hand-editing the generated .html is pointless: this script
+# overwrites them on every build, so the schema lives here.
 BUSINESS_ID = SITE + "/#business"
 
 SCHEMA_TYPE = {
@@ -271,6 +272,8 @@ SCHEMA_TYPE = {
     "privacy.html":             ("WebPage",   "Privacy Policy"),
     "terms.html":               ("WebPage",   "Terms & Conditions"),
     "good-faith-estimate.html": ("WebPage",   "Good Faith Estimate"),
+    "insurance.html":           ("WebPage",   "Insurance and Rates"),
+    "telehealth-therapy-colorado.html": ("WebPage", "Telehealth Therapy in Colorado"),
 }
 
 
@@ -285,13 +288,17 @@ def titled(t, limit=60):
     Google cuts titles around 60 characters. "| Golden Hour Wellness Colorado"
     is 31 of them, which is why several post titles were being truncated
     mid-sentence. Try the full brand, then the short one, then no brand at all
-    (Google appends the site name itself anyway)."""
-    for suffix in (" | " + BRAND, " | " + BRAND_SHORT, ""):
-        if len(t) + len(suffix) <= limit:
+    (Google appends the site name itself anyway). A title that already says
+    Colorado skips the full brand so the state doesn't appear twice."""
+    import html as _h
+    n = len(_h.unescape(t))
+    order = (" | " + BRAND, " | " + BRAND_SHORT, "")
+    if "Colorado" in t:
+        order = order[1:]
+    for suffix in order:
+        if n + len(suffix) <= limit:
             return t + suffix
     return t
-
-
 def schema_for(slug, title, desc, canon):
     """Return a <script type=application/ld+json> block for this page, or ""."""
     import json as _json
@@ -317,9 +324,27 @@ def schema_for(slug, title, desc, canon):
             + '\n</script>\n')
 
 
-def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img="assets/img/hero.jpg"):
+def breadcrumbs(trail):
+    """BreadcrumbList JSON-LD. trail is [(name, slug), ...] after Home, ending
+    with the current page. Names are plain text, not HTML."""
+    import json as _json, html as _h
+    items = [{"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"}]
+    for i, (name, slug) in enumerate(trail, start=2):
+        items.append({"@type": "ListItem", "position": i,
+                      "name": _h.unescape(name), "item": clean_url(slug)})
+    node = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+            "itemListElement": items}
+    return ('<script type="application/ld+json">\n'
+            + _json.dumps(node, indent=2, ensure_ascii=False)
+            + '\n</script>\n')
+
+
+def page(slug, title, desc, body, extra_head="", active=None, extra_css="",
+         img="assets/img/hero.jpg", crumbs=None):
     canon = clean_url(slug)
-    img_abs = img if img.startswith("http") else f"{SITE}/{img}"
+    img_abs = img.lstrip("/") if not img.startswith("http") else img
+    img_abs = img_abs if img_abs.startswith("http") else f"{SITE}/{img_abs}"
+    crumb_ld = breadcrumbs(crumbs) if crumbs else ""
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -338,6 +363,8 @@ def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img=
 <meta property="og:url" content="{canon}">
 <meta property="og:image" content="{img_abs}">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{img_abs}">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -345,7 +372,7 @@ def page(slug, title, desc, body, extra_head="", active=None, extra_css="", img=
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/brand.css">
 {extra_head}
-{schema_for(slug, title, desc, canon)}<style>{PAGE_CSS}{extra_css}</style>
+{schema_for(slug, title, desc, canon)}{crumb_ld}<style>{PAGE_CSS}{extra_css}</style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>

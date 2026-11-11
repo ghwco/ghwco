@@ -5,7 +5,7 @@ Blog index + post pages, generated from content/blog/*.json.
     python3 build_blog.py
 
 The `published` flag is the whole point of this file. An unpublished post is
-not merely hidden — it is never written to disk at all, so there's no orphan
+not merely hidden; it is never written to disk at all, so there's no orphan
 URL sitting on the server for someone to find or for Google to index. Toggling
 it in Tina commits a one-character change, the build runs, and the page either
 exists or it doesn't.
@@ -18,6 +18,27 @@ import io, os, glob, json, re
 from build_pages import page, head_block, cta, SITE, clean_url, titled
 
 OUT = []
+
+# Where each post points back to. Keyed by slug so a new post written in the
+# CMS falls back to the services hub until it gets an entry here.
+SERVICE_FOR = {
+    "what-emdr-feels-like": [("trauma-emdr.html", "Trauma &amp; EMDR therapy")],
+    "baby-blues-vs-postpartum-depression": [
+        ("mamas-golden-hour.html", "Mama&rsquo;s Golden Hour"),
+        ("anxiety-depression.html", "therapy for anxiety and depression")],
+    "rest-you-have-to-earn": [("anxiety-depression.html", "Therapy for anxiety and depression")],
+}
+
+# Search descriptions, when the card excerpt runs long or short for a
+# results page. The excerpt still shows on the Journal cards.
+META_DESC = {
+    "baby-blues-vs-postpartum-depression":
+        "Baby blues, postpartum depression and postpartum anxiety get lumped together. They aren't the same, and knowing which one you're in changes what helps.",
+    "what-emdr-feels-like":
+        "People expect EMDR to be dramatic. It's quieter and more ordinary than that. A Colorado EMDR therapist on what the first sessions and processing feel like.",
+    "rest-you-have-to-earn":
+        "If you can only rest once the list is finished, you will never rest, because the list is not a finite object. Where that belief comes from, and where to start.",
+}
 
 
 def emit(slug, **kw):
@@ -62,7 +83,7 @@ def hero_path(p):
     """Full site-relative path to a post's hero image.
 
     Tina's media picker is rooted at assets/img (see tina/config.ts), so it
-    stores and expects just the filename there — not the full path. The
+    stores and expects just the filename there, not the full path. The
     generator is what needs the full path, so it adds the prefix back on
     here rather than the content JSON carrying it twice."""
     name = p.get("heroImage", "hero.jpg")
@@ -97,9 +118,10 @@ for p in live:
           "headline": p["title"],
           "datePublished": p.get("date"),
           "description": p.get("excerpt", ""),
-          "image": "%s/%s" % (SITE, hero_path(p)),
-          "author": {"@type": "Person", "name": p.get("author", "Golden Hour Wellness Colorado")},
-          "publisher": {"@type": "MedicalBusiness",
+          "image": "%s/%s" % (SITE, hero_path(p).lstrip("/")),
+          "author": {"@type": "Person", "name": p.get("author", "Golden Hour Wellness Colorado"),
+                     "url": clean_url("shayla.html") if p.get("author", "").startswith("Shayla") else SITE + "/"},
+          "publisher": {"@type": "MedicalBusiness", "@id": SITE + "/#business",
                         "name": "Golden Hour Wellness Colorado, LLC"},
           "mainEntityOfPage": clean_url(post_url(p))}
 
@@ -117,16 +139,20 @@ for p in live:
       <p>If any of this lands close to home, a first conversation is free and
       fifteen minutes. Call or text <a href="tel:+13037369822">(303)&nbsp;736-9822</a>,
       or <a href="contact.html">send a message</a>.</p>
+      <p>More on how we work with this: %s.</p>
     </div>
 
     <p style="margin-top:2rem"><a href="blog.html">&larr; All posts</a></p>
   </div>
-</section>''' % (hero_path(p), p.get("heroAlt", ""), render_body(p.get("body", []))) + cta()
+</section>''' % (hero_path(p), p.get("heroAlt", ""), render_body(p.get("body", [])),
+       " and ".join('<a href="%s">%s</a>' % pair
+                    for pair in SERVICE_FOR.get(p["slug"], [("services.html", "our services")]))) + cta()
 
     emit(post_url(p),
          title=titled(p["title"]),
-         desc=p.get("excerpt", "")[:180],
+         desc=META_DESC.get(p["slug"], p.get("excerpt", "")[:180]),
          body=body, active="blog.html",
+         crumbs=[("Journal", "blog.html"), (p["title"], post_url(p))],
          img=hero_path(p),
          extra_head='<script type="application/ld+json">%s</script>' % json.dumps(ld))
 
@@ -149,9 +175,10 @@ else:
              'New writing will appear on this page.</p></div>')
 
 emit("blog.html",
-     title=titled("Journal"),
-     desc="Writing on trauma, EMDR, anxiety and everyday mental health from the "
-          "clinicians at Golden Hour Wellness Colorado.",
+     title=titled("Journal: Notes on Therapy"),
+     desc="Notes from the therapists at Golden Hour Wellness Colorado on EMDR, the "
+          "baby blues, rest, and the questions that come up most in a first session.",
+     crumbs=[("Journal", "blog.html")],
      body=head_block("Journal", "Notes from the practice.",
                      "Occasional writing on the things that come up most often in "
                      "the room. Nothing here is a substitute for therapy, but it "

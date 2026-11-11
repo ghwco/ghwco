@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """FAQ + legal pages.  python3 build_legal.py"""
 import io, json
-from build_pages import page, head_block, cta, SITE, titled
+from build_pages import page, head_block, cta, SITE, titled, clean_url
 
 OUT = []
 def emit(slug, **kw):
     io.open(slug, "w", encoding="utf-8").write(page(slug, **kw)); OUT.append(slug)
 
-UPDATED = "22 August 2026"
+UPDATED = "August 22, 2026"
 
 # ─────────────────────────────────────────────── FAQ
 # Questions live in content/faq.json so Tina can edit them without
@@ -15,16 +15,24 @@ UPDATED = "22 August 2026"
 QA = [(i["question"], i["answer"])
       for i in json.load(io.open("content/faq.json", encoding="utf-8"))["items"]]
 
-faq_ld = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-  {"@type":"Question","name":q,
-   "acceptedAnswer":{"@type":"Answer","text":a.replace("&rsquo;","'").replace("&nbsp;"," ")}}
-  for q, a in QA]}
+def _plain(t):
+    import re as _re, html as _h
+    return _h.unescape(_re.sub(r"<[^>]+>", " ", t)).replace("  ", " ").strip()
+
+def faq_schema(pairs):
+    return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":_plain(q),
+       "acceptedAnswer":{"@type":"Answer","text":_plain(a)}}
+      for q, a in pairs]}
+
+faq_ld = faq_schema(QA)
 items = "".join(
   f'<details><summary>{q}</summary><div class="a">{a}</div></details>' for q, a in QA)
 
 emit("faq.html",
-  title=titled("Frequently Asked Questions"),
-  desc="Insurance, rates, telehealth, EMDR and scheduling at Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna.",
+  title=titled("FAQ: Insurance, Rates &amp; Telehealth"),
+  desc="Insurance, rates, telehealth, EMDR and booking at Golden Hour Wellness Colorado. In-network with Aetna, United Healthcare and Cigna for individual therapy.",
+  crumbs=[("FAQ", "faq.html")],
   extra_head=f'<script type="application/ld+json">{json.dumps(faq_ld)}</script>',
   body=head_block("FAQ", "Insurance, rates and the questions people ask first.",
     "If yours isn&rsquo;t here, just ask. We&rsquo;d rather answer it than have it stop you.") + f'''
@@ -41,14 +49,14 @@ emit("faq.html",
       <tr><th>In-network plans</th><td>Aetna, United Healthcare, Cigna</td></tr>
       <tr><th>Session length</th><td>50 minutes, individual</td></tr>
       <tr><th>First step</th><td>A free 15-minute consultation</td></tr>
-      <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only &mdash; $25 per session, or $150 for six weeks</td></tr>
+      <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only: $25 per session, or $150 for six weeks</td></tr>
     </table>
 
     <h3>If we&rsquo;re out of network</h3>
     <p>Plenty of plans reimburse a meaningful share of out-of-network therapy, and
     most people don&rsquo;t know what theirs does. You can
-    <a href="index.html#benefits">check your out-of-network benefits in about a minute</a>
-    &mdash; it asks for your insurer and member ID and tells you what you&rsquo;d get back.</p>
+    <a href="index.html#benefits">check your out-of-network benefits in about a minute</a>.
+    It asks for your insurer and member ID and tells you what you&rsquo;d get back.</p>
 
     <h3>Self-pay</h3>
     <p>You&rsquo;re entitled to a written <a href="good-faith-estimate.html">Good Faith
@@ -59,6 +67,8 @@ emit("faq.html",
       <p><strong>Insurance is not accepted for Mama&rsquo;s Golden Hour.</strong>
       Group sessions are self-pay. Insurance applies to individual therapy only.</p>
     </div>
+
+    <p>Couples sessions, the group and the out-of-network route are covered in more detail on <a href="insurance.html">insurance and rates</a>.</p>
   </div>
 </section>
 
@@ -72,6 +82,7 @@ emit("faq.html",
 # ─────────────────────────────────────────────── PRIVACY
 emit("privacy.html",
   title=titled("Privacy Policy"),
+  crumbs=[("Privacy Policy", "privacy.html")],
   desc="How Golden Hour Wellness Colorado collects, uses and protects information submitted through this website, and why not to send health details.",
   body=head_block("Legal", "Privacy Policy", f"Last updated {UPDATED}.") + f'''
 <section class="section">
@@ -119,6 +130,7 @@ emit("privacy.html",
 # ─────────────────────────────────────────────── TERMS
 emit("terms.html",
   title=titled("Terms &amp; Conditions"),
+  crumbs=[("Terms & Conditions", "terms.html")],
   desc="Terms of use for the Golden Hour Wellness Colorado website, including scheduling, licensure, third-party tools and limitations of liability.",
   body=head_block("Legal", "Terms &amp; Conditions", f"Last updated {UPDATED}.") + '''
 <section class="section">
@@ -160,6 +172,7 @@ emit("terms.html",
 # ─────────────────────────────────────────────── GFE
 emit("good-faith-estimate.html",
   title=titled("Good Faith Estimate"),
+  crumbs=[("Good Faith Estimate", "good-faith-estimate.html")],
   desc="Your right to a Good Faith Estimate of expected charges under the No Surprises Act, and how to request one from Golden Hour Wellness Colorado.",
   body=head_block("Your rights", "Good Faith Estimate",
     "Under the No Surprises Act you have the right to know what your care will cost before you begin.") + '''
@@ -198,5 +211,56 @@ emit("good-faith-estimate.html",
     <p>For questions or more information about your right to a Good Faith Estimate, visit <a href="https://www.cms.gov/nosurprises" rel="noopener">www.cms.gov/nosurprises</a> or call <strong>1-800-985-3059</strong>.</p>
   </div>
 </section>''')
+
+# ─────────────────────────────────────────────── INSURANCE
+# Old Squarespace /insurance used to 301 to /faq#insurance. It now has its
+# own page. Every fact here already appears elsewhere on the site (FAQ,
+# couples page, Good Faith Estimate, group.json). Self-pay rates for
+# individual therapy are not published, so this page doesn't state one.
+G = json.load(io.open("content/group.json", encoding="utf-8"))
+INS_FAQS = [
+  ("Will you check my coverage before my first session?",
+   "Yes. If you have Aetna, United Healthcare or Cigna, we&rsquo;ll help you find out what your plan sets as your copay or coinsurance before you start, not after the first bill."),
+  ("Is couples therapy covered by insurance?",
+   "Often not, or only under certain conditions, because insurers generally require an individual diagnosis. We&rsquo;ll check your plan and give you a written estimate before you start."),
+  ("Can I use insurance for Mama&rsquo;s Golden Hour?",
+   f"No. The group is self-pay only: ${G['pricePerSession']} per session, or ${G['priceFull']} for the full six weeks."),
+  ("My plan isn&rsquo;t one of those three. Can I still come?",
+   "Yes. Many plans reimburse part of out-of-network therapy. Run the benefits checker on our homepage, or ask us to talk it through with you on the free consultation."),
+]
+
+emit("insurance.html",
+  title=titled("Therapy Insurance: Aetna, Cigna &amp; UHC"),
+  desc="In-network with Aetna, Cigna and UHC for individual therapy in Colorado. What you'd pay, how to check out-of-network benefits, and self-pay options.",
+  crumbs=[("Insurance & Rates", "insurance.html")],
+  extra_head=f'<script type="application/ld+json">{json.dumps(faq_schema(INS_FAQS))}</script>',
+  body=head_block("Insurance &amp; rates", "Aetna, Cigna or United Healthcare? You&rsquo;re in network.",
+    "For individual therapy, at least. Here&rsquo;s what you&rsquo;d actually pay, what to do if your plan is a different one, and where insurance tends to stop.") + f'''
+<section class="section">
+  <div class="wrap prose">
+    <h2>With an in-network plan</h2>
+    <p>You pay whatever your policy sets as your copay or coinsurance for outpatient therapy. That number varies a lot from plan to plan, so we help you check it before your first session.</p>
+    <p>Sessions are 50 minutes. They can be in person or by <a href="telehealth-therapy-colorado.html">telehealth anywhere in Colorado</a>.</p>
+
+    <table>
+      <tr><th>In-network plans</th><td>Aetna, United Healthcare, Cigna</td></tr>
+      <tr><th>Covers</th><td>Individual therapy</td></tr>
+      <tr><th>Couples therapy</th><td>Depends on the plan, and often not covered</td></tr>
+      <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only</td></tr>
+      <tr><th>First step</th><td>A free 15-minute consultation</td></tr>
+    </table>
+
+    <h2>Out of network</h2>
+    <p>Plenty of plans pay back a real share of out-of-network therapy, and most people have never checked what theirs does. The <a href="index.html#benefits">benefits checker on our homepage</a> takes your insurer and member ID and tells you, in about a minute, what you&rsquo;d likely get back.</p>
+
+    <h2>Paying for yourself</h2>
+    <p>If you&rsquo;re uninsured or choosing not to use insurance, the federal No Surprises Act gives you the right to a written <a href="good-faith-estimate.html">Good Faith Estimate</a> before you begin. Ask for one any time. If you&rsquo;re self-pay we send it before your first session anyway.</p>
+
+    <h2>Questions people ask about cost</h2>
+    <div class="faq">{"".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in INS_FAQS)}</div>
+
+    <p style="margin-top:2rem">Still unsure? Call or text <a href="tel:+13037369822">(303)&nbsp;736-9822</a> or <a href="contact.html">send a message</a> and we&rsquo;ll look at your plan with you. Or see the full <a href="faq.html">FAQ</a> and the <a href="services.html">services we offer</a>.</p>
+  </div>
+</section>''' + cta())
 
 print("wrote:", len(OUT)); [print("  ", o) for o in OUT]
