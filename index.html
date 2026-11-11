@@ -20,10 +20,12 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://www.goldenhourwellnesscolorado.com/">
 <meta property="og:site_name" content="Golden Hour Wellness Colorado">
-<meta property="og:title" content="Golden Hour Wellness Colorado">
-<meta property="og:description" content="EMDR, trauma and addiction therapy across Colorado, plus a virtual group for mothers.">
+<meta property="og:title" content="Trauma, EMDR &amp; Addiction Therapy | Golden Hour Wellness CO">
+<meta property="og:description" content="Therapist-owned counseling in Colorado. EMDR and trauma therapy, addiction counseling, and a virtual group for mothers. In-network with Aetna, UHC and Cigna.">
 <meta property="og:image" content="https://www.goldenhourwellnesscolorado.com/assets/img/hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Trauma, EMDR &amp; Addiction Therapy | Golden Hour Wellness CO">
+<meta name="twitter:description" content="Therapist-owned counseling in Colorado. EMDR and trauma therapy, addiction counseling, and a virtual group for mothers. In-network with Aetna, UHC and Cigna.">
 <meta name="twitter:image" content="https://www.goldenhourwellnesscolorado.com/assets/img/hero.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,12 +41,18 @@
   "name":"Golden Hour Wellness Colorado, LLC",
   "url":"https://www.goldenhourwellnesscolorado.com/",
   "email":"goldenhourwellco@gmail.com","telephone":"+1-303-736-9822",
+  "image":"https://www.goldenhourwellnesscolorado.com/assets/img/hero.jpg",
+  "logo":"https://www.goldenhourwellnesscolorado.com/assets/img/email-mark.png",
+  "description":"Therapist-owned counseling practice serving clients across Colorado in person and by telehealth: trauma and EMDR therapy, addiction counseling, anxiety and depression, couples therapy, and a virtual group for mothers.",
+  "founder":{"@type":"Person","@id":"https://www.goldenhourwellnesscolorado.com/shayla#person","name":"Shayla Martinez-O'Brien","jobTitle":"LPC, Founder"},
   "areaServed":{"@type":"State","name":"Colorado"},
   "sameAs":["https://www.instagram.com/goldenhourwellnesscolorado","https://www.psychologytoday.com/profile/1406337"],
   "availableService":[
     {"@type":"MedicalTherapy","name":"EMDR Therapy"},
     {"@type":"MedicalTherapy","name":"Trauma Therapy"},
     {"@type":"MedicalTherapy","name":"Substance Use and Addiction Counseling"},
+    {"@type":"MedicalTherapy","name":"Therapy for Anxiety and Depression"},
+    {"@type":"MedicalTherapy","name":"Couples Therapy"},
     {"@type":"MedicalTherapy","name":"Group Therapy"}
   ]
 }
@@ -52,7 +60,7 @@
 
 <style>
 /* ============================================================
-   v2 — page-specific styles. Design system lives in brand.css.
+   v2: page-specific styles. Design system lives in brand.css.
    ============================================================ */
 
 /* ---------- hero ---------- */
@@ -80,7 +88,7 @@
 }
 /* belt and braces against the flare's brightest pixels */
 .hero h1, .hero p{text-shadow:0 1px 18px rgba(24,16,28,.45)}
-/* very fine grain — stops the gradient banding and adds a printed quality */
+/* very fine grain; stops the gradient banding and adds a printed quality */
 .hero__grain{
   position:absolute; inset:0; z-index:-1; opacity:.16; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
@@ -94,7 +102,7 @@
 .hero p{color:rgba(255,255,255,.9); font-size:clamp(1.02rem,1.5vw,1.2rem); max-width:38rem}
 .hero__actions{display:flex; flex-wrap:wrap; gap:.7rem; margin-top:2rem}
 
-/* trust strip — a single hairline row, not a stack of floating pills */
+/* trust strip; a single hairline row, not a stack of floating pills */
 .trust{position:relative; z-index:2; background:var(--shell); border-top:1px solid var(--hair)}
 .trust__inner{
   display:grid; grid-template-columns:repeat(3,1fr);
@@ -121,23 +129,23 @@
 @media (max-width:880px){
   .welcome__grid{grid-template-columns:1fr}
   /* the stacked view swaps to the 3:2 crop, so widen the cap and retire the
-     4:5 ratio — otherwise the wide file gets cropped straight back to tall */
+     4:5 ratio; otherwise the wide file gets cropped straight back to tall */
   /* Doubled class on purpose. `.figure{margin:0}` is declared further down
      with the same specificity, so a plain `.figure--portrait` selector loses
-     the cascade on source order and margin-inline silently reverts to 0 —
+     the cascade on source order and margin-inline silently reverts to 0;
      the photo capped at 34rem but stayed hard left. `.figure.figure--portrait`
      is 0,0,2,0 and wins regardless of where it sits in the sheet. */
   .figure.figure--portrait{max-width:34rem; margin-inline:auto}
   /* Same cascade trap, same fix. `.figure--portrait img{aspect-ratio:4/5}`
      further down is also 0,0,1,1 and was winning on source order, so the
      3:2 file was being poured into a 4:5 box and object-fit:cover cropped
-     it straight back to a tall portrait — the exact thing the wide crop
+     it straight back to a tall portrait; the exact thing the wide crop
      exists to avoid. 0,0,2,1 here settles it. */
   .figure.figure--portrait img{aspect-ratio:3/2}
 }
 .figure{margin:0; position:relative}
 /* height:auto is load-bearing. Adding width/height attributes to the <img>
-   (good practice — they reserve space and stop layout shift) also sets the
+   (good practice; they reserve space and stop layout shift) also sets the
    CSS height as a presentational hint. With width:100% and height left at
    the 1357px attribute value, the photo rendered 352x1357 instead of 352x440.
    height:auto hands control back to aspect-ratio below. */
@@ -158,7 +166,7 @@
 /* ── Orphan-row centering ─────────────────────────────────────────────
    With 5 cards in a 3-across grid the last row holds 2 and hangs left.
    Switching to a 6-column track and spanning each card 2 columns lets
-   the final pair start at column 2 and 4, which centres them under the
+   the final pair start at column 2 and 4, which centers them under the
    row above. The :nth-child/:nth-last-child pair means this only fires
    when there are exactly 5 cards, so 3- and 6-card grids are untouched. */
 @media (min-width:981px){
@@ -172,7 +180,7 @@
 /* Same trick one breakpoint down. In the 2-across band a trailing odd card
    hangs left. A 4-column track with span 2 lets that lone last card sit
    across columns 2–3. :nth-child(odd):nth-last-child(1) means "last card,
-   odd-numbered" — in a 2-col grid, exactly the alone-in-its-row case. */
+   odd-numbered"; in a 2-col grid, exactly the alone-in-its-row case. */
 @media (min-width:621px) and (max-width:980px){
   .grid-3, .cards{grid-template-columns:repeat(4,1fr)}
   .grid-3 > *, .cards > *{grid-column:span 2}
@@ -201,7 +209,7 @@
 
 /* ---------- team ---------- */
 /* The team grid used to drop 3 columns straight to 1 at 980px, which made a
-   4:5 portrait roughly 540px wide and 680px tall on a tablet — one card
+   4:5 portrait roughly 540px wide and 680px tall on a tablet; one card
    swallowing most of the viewport. Two columns bridge that range, and the
    single-column case is capped so it can't balloon either. */
 .people{display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem}
@@ -305,7 +313,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
   .hero .eyebrow{font-size:.62rem; letter-spacing:.14em}
   .hero h1{font-size:clamp(1.95rem,7.6vw,2.6rem)}
   .hero p{font-size:1rem}
-  /* Two identical full-width slabs gave the eye no hierarchy — both buttons
+  /* Two identical full-width slabs gave the eye no hierarchy; both buttons
      read as equally important. Primary stays solid; secondary drops to a
      quiet text link, which also reclaims ~55px of vertical space. */
   .hero__actions{gap:.9rem; width:100%; margin-top:1.6rem; align-items:center; flex-direction:column}
@@ -321,7 +329,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
   .hero__actions .btn-ghost:hover{background:none; text-decoration-color:var(--gold); color:var(--gold)}
   
   /* THE TRUST STRIP WAS THE PROBLEM ON MOBILE.
-     Three stacked rows ran ~150px — roughly a quarter of the first screen —
+     Three stacked rows ran ~150px; roughly a quarter of the first screen;
      and formed a heavy white slab hard against the dark photo. It was also
      the least important content on screen fighting the headline for weight.
      On phones only the insurance line survives here; the other two points
@@ -338,7 +346,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
   .tabs li{display:contents}
   .tabs button{width:100%; padding:.8rem .5rem; font-size:.83rem; line-height:1.25; white-space:normal}
 
-  /* all three carriers identical — no spanning first item */
+  /* all three carriers identical; no spanning first item */
   .carriers{grid-template-columns:1fr}
 
   .cta__actions{flex-direction:column}
@@ -515,7 +523,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
           <span class="svc__no">04</span><span class="svc__rule"></span>
         </div>
         <h3>Couples &amp; Relationships</h3>
-        <p>Family stress, work stress, and the big pivots. Navigating change with more clarity and a stronger sense of purpose.</p>
+        <p>Family stress, work stress, and the big pivots. Getting through change with more clarity and a stronger sense of purpose.</p>
       </a>
 
       <a class="svc reveal" href="/mamas-golden-hour">
@@ -556,7 +564,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
         </div>
       </article>
 
-      <!-- NOTE: confirm "headshot 3" is Ashley before launch — source site doesn't label it -->
+      <!-- NOTE: confirm "headshot 3" is Ashley before launch; source site doesn't label it -->
       <article class="person reveal">
         <div class="person__frame">
           <img src="assets/img/ashley.jpg" width="1103" height="1378" alt="Portrait of Ashley LeRossignol" loading="lazy">
@@ -567,7 +575,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
           <ul class="tags"><li>Group facilitation</li><li>CBT</li><li>Consulting</li></ul>
           <p>Ashley co-facilitates <a href="/mamas-golden-hour">Mama&rsquo;s Golden Hour</a> with Shayla and consults on clinical practice. <strong>She does not take individual clients through Golden Hour Wellness</strong>, so scheduling here is for the group only.</p>
           <details class="more"><summary>Read more</summary>
-            <p>Working from a solution-oriented framework, Ashley brings over 10 years of experience with anxiety, depression, relationship challenges, and family and work stressors. She utilizes Cognitive Behavioral Therapy, highlighting the ways mood, thoughts and behaviors shape one another.</p>
+            <p>Working from a solution-oriented framework, Ashley brings over 10 years of experience with anxiety, depression, relationship challenges, and family and work stressors. She uses Cognitive Behavioral Therapy, highlighting the ways mood, thoughts and behaviors shape one another.</p>
             <p>Master&rsquo;s in counseling psychology from the University of San Francisco. Outside of therapy you&rsquo;ll find her outdoors, traveling, cooking and exploring new places.</p>
           </details>
         </div>
@@ -630,7 +638,7 @@ details.more p{margin-top:.6rem; font-size:.9rem}
     <div class="reveal">
       <p class="eyebrow">Insurance &amp; rates</p>
       <h2 data-cms="insurance.headline">In-network with three major plans.</h2>
-      <p>If you don&rsquo;t see your carrier, reach out anyway. We can talk through out-of-network reimbursement and self-pay options.</p>
+      <p>If you don&rsquo;t see your carrier, reach out anyway. We can talk through out-of-network reimbursement and self-pay options. <a href="/insurance">How insurance works here</a>.</p>
       <ul class="carriers"><li>Aetna</li><li>United Healthcare</li><li>Cigna</li></ul>
       <div class="note"><p><strong>Good Faith Estimate:</strong> under the No Surprises Act you have the right to a written estimate of expected charges before your first session. Ask us and we&rsquo;ll send one over.</p></div>
     </div>
@@ -729,7 +737,8 @@ details.more p{margin-top:.6rem; font-size:.9rem}
         <li><a href="/team">Our Team</a></li>
         <li><a href="/blog">Journal</a></li>
         <li><a href="/faq">FAQ</a></li>
-        <li><a href="/faq#insurance">Insurance &amp; rates</a></li>
+        <li><a href="/insurance">Insurance &amp; rates</a></li>
+        <li><a href="/telehealth-therapy-colorado">Telehealth in Colorado</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
