@@ -81,13 +81,17 @@ emit("services.html",
 
 # ─────────────────────────────────────────────── SERVICE PAGES
 def service(slug, name, title, desc, lede, paras, good_fit, practical, who,
-            process=(), faqs=(), seo_title=None, related=()):
+            process=(), faqs=(), seo_title=None, related=(), h1=None, extra=""):
     """process:   paragraphs for 'What the work looks like'.
        faqs:      (question, answer) pairs, rendered as accordions AND emitted
                   as FAQPage schema, which is what earns the expandable results
                   in Google and gives summarizers clean question/answer pairs.
        seo_title: the <title>, when it should differ from the on-page H1.
-       related:   journal post slugs to link under "From the journal"."""
+       related:   journal post slugs to link under "From the journal".
+       h1:        the on-page headline, when it should differ from the short
+                  name used in the breadcrumb.
+       extra:     a section of HTML placed between the opening paragraphs and
+                  the fit list, so a page can carry something the others don't."""
     ld = [{"@context":"https://schema.org","@type":"MedicalTherapy","name":name,
            "url":clean_url(slug),
            "provider":{"@type":"MedicalBusiness","@id":BUSINESS_ID,
@@ -102,10 +106,10 @@ def service(slug, name, title, desc, lede, paras, good_fit, practical, who,
     qa = ('<h2>Common questions</h2><div class="faq">' + "".join(
           f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>'
           for q, a in faqs) + "</div>") if faqs else ""
-    body = head_block("Services", title, lede) + f'''
+    body = head_block("Services", h1 or title, lede) + f'''
 <section class="section">
   <div class="wrap prose">
-    {"".join(f"<p>{p}</p>" for p in paras)}
+    {"".join(f"<p>{p}</p>" for p in paras)}{("\n\n    " + extra) if extra else ""}
 
     <h2>This may be a good fit if</h2>
     <ul>{fit}</ul>
@@ -268,6 +272,49 @@ service("couples-therapy.html", "Couples Therapy", "Couples &amp; Relationships"
   ],
   seo_title="Couples Therapy in Colorado",
   related=["baby-blues-vs-postpartum-depression"])
+
+# Trauma and substance use together. Every fact here is already on the site:
+# Shayla's profile ("a pairing I see often and treat as one picture"), the
+# substance use page (no abstinence required, outpatient only, relapse
+# handling, stricter federal privacy rules), the EMDR page and the team page.
+service("trauma-and-addiction.html", "Trauma and Addiction Therapy", "Trauma &amp; Addiction",
+  "Trauma and addiction therapy in Colorado: EMDR with an LPC, addiction counseling with an LAC, no abstinence needed to start. In-network with Aetna, Cigna, UHC.",
+  "For people whose drinking or using started, at least in part, as a way to live with something that happened. In person or by telehealth anywhere in Colorado.",
+  ["Plenty of people who come in for substance use are also carrying trauma, and plenty who come in for trauma have been getting through it with alcohol or something else. Often nobody has put the two in the same sentence.",
+   "Here they&rsquo;re treated as one picture. Work on the drinking alone and the reason for it is still there. Work on the trauma alone and whatever has kept it bearable is still sitting in the room.",
+   "So you work on both, in one practice, with clinicians who consult with each other."],
+  ["You drink or use more on the days a memory gets close",
+   "You&rsquo;ve been through addiction treatment and the reasons underneath never came up",
+   "Trauma therapy elsewhere stalled because the using was never on the table",
+   "You want one place to work on both, without being lectured",
+   "You&rsquo;re not sure the past and the drinking are connected, and you&rsquo;d like to find out"],
+  STD,
+  'Usually <a href="shayla.html">Shayla Martinez-O&rsquo;Brien, LPC</a>, who works with trauma and substance use as one picture. <a href="chrissie.html">Chrissie Flynn-Weirich, LAC</a>, when substance use is the main thing you want to work on. Chrissie&rsquo;s sessions are telehealth.',
+  process=[
+   "Nobody is asked to commit to abstinence at the door. The first sessions map both sides: what you&rsquo;re carrying, what sets it off, when use happens and what it does for you. Those often turn out to be the same list.",
+   "Steadiness comes before anything gets opened. That&rsquo;s true of all the trauma work here, and it matters more when using has been the main way you settle yourself. Early on you build other ways to bring your body back down, and you plan for the situations you already know are hard.",
+   "EMDR may come in once there&rsquo;s something steady to come back to. You hold a piece of a memory in mind while following a left-right cue. Sets are short, you can stop at any point, and you don&rsquo;t have to tell the whole story.",
+   "A return to use along the way is information. You keep your appointment.",
+  ],
+  faqs=[
+   ("Which comes first, the trauma or the substance use?",
+    "Neither gets put on hold until the other is fixed. Early sessions lean toward stability, building ways to settle that don&rsquo;t depend on using, and the trauma work grows from there at a pace you set."),
+   ("Do I have to stop drinking or using before trauma therapy?",
+    "No one is asked to commit to abstinence to start here. How trauma processing fits alongside current use is something we work out with you, honestly, in the first few sessions."),
+   ("Is this a dual diagnosis program?",
+    "No. We&rsquo;re outpatient counselors, not a treatment center or a medical facility, so there&rsquo;s no detox and no prescribing. If you need medically supervised withdrawal or medication for opioid or alcohol use, we&rsquo;ll help you find it and can work alongside that care."),
+   ("Does insurance cover it?",
+    "Individual therapy is in-network with Aetna, United Healthcare and Cigna. With another plan, you can check your out-of-network benefits or ask for a written Good Faith Estimate. <a href=\"insurance.html\">Insurance and rates</a> has the details."),
+   ("Is what I say about substance use kept private?",
+    "Yes, within the same legal limits as any therapy. Federal rules for substance use treatment records are stricter than general health privacy rules, and we go through what that means at intake."),
+  ],
+  seo_title="Trauma and Addiction Therapy in Colorado",
+  h1="Trauma and substance use, treated as one picture.",
+  extra='''<h2>Two licenses, one practice</h2>
+    <p><a href="shayla.html">Shayla Martinez-O&rsquo;Brien</a> is a Licensed Professional Counselor with 11 years of practice in trauma therapy. She uses EMDR among other trauma-focused approaches, and substance use alongside trauma is a pairing she sees often.</p>
+    <p><a href="chrissie.html">Chrissie Flynn-Weirich</a> is a Licensed Addiction Counselor with more than 13 years supporting people living with substance use disorders. She starts from strengths rather than deficits, and she doesn&rsquo;t require abstinence or assume it.</p>
+    <p>The team meets for clinical consultation, so the thinking behind your care isn&rsquo;t happening in isolation. Read more about <a href="trauma-emdr.html">trauma and EMDR</a> or <a href="substance-use.html">substance use and recovery</a> on their own.</p>''',
+  related=["what-emdr-feels-like"])
 
 # ─────────────────────────────────────────────── MAMA'S GOLDEN HOUR
 # The Event block only goes out while the start date is still ahead. Once a
@@ -446,6 +493,72 @@ emit("telehealth-therapy-colorado.html",
     <div class="faq">{"".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in TELE_FAQS)}</div>
 
     {reading(["what-emdr-feels-like"])}
+  </div>
+</section>''' + cta())
+
+# ─────────────────────────────────────────────── LIFE TRANSITIONS
+# Built from what the site already says: life transitions is part of
+# Chrissie's focus (team page, profile), "major life transitions" is on the
+# about page, the couples page names the transitions, and the team page says
+# transitions can go to either clinician. Session facts match STD.
+LT_FAQS = [
+  ("Is it worth coming to therapy for a change I wanted?",
+   "Yes. A change you chose can still cost you a routine and a version of yourself, and that loss is easier to work through once you can say it out loud. Coming in earlier generally means less to undo."),
+  ("How long does therapy for a life transition take?",
+   "Some people come for a focused stretch of eight to twelve sessions around one change. Others stay longer because the change opened up something bigger. We check in openly about whether it&rsquo;s helping, and you can pause or stop whenever you want."),
+  ("Do I need a diagnosis to come in?",
+   "You don&rsquo;t need to arrive with one. If you use insurance, plans generally require a diagnosis on the claim, and we&rsquo;ll talk that through with you at the start rather than leave it buried in paperwork."),
+  ("Can I do this by telehealth?",
+   "Yes. Chrissie&rsquo;s sessions are all telehealth, and Shayla sees clients in person or by video. You need to be physically in Colorado during each session."),
+  ("What if the change is happening to both of us?",
+   "Then <a href=\"couples-therapy.html\">couples therapy</a> may be the better fit. Ask on the free consultation and we&rsquo;ll help you decide."),
+]
+
+LT_LD = [{"@context":"https://schema.org","@type":"MedicalTherapy","name":"Life Transitions Therapy",
+          "url":clean_url("life-transitions-therapy.html"),
+          "provider":{"@type":"MedicalBusiness","@id":BUSINESS_ID,
+                      "name":"Golden Hour Wellness Colorado, LLC",
+                      "telephone":"+1-303-736-9822",
+                      "areaServed":{"@type":"State","name":"Colorado"}}},
+         faq_ld(LT_FAQS)]
+
+emit("life-transitions-therapy.html",
+  title=titled("Life Transitions Therapy in Colorado"),
+  desc="Therapy in Colorado for a move, a new job, a new baby, an illness or a separation. In person or by telehealth, in-network with Aetna, Cigna and UHC.",
+  active="services.html",
+  crumbs=[("Services", "services.html"), ("Life Transitions", "life-transitions-therapy.html")],
+  extra_head="".join('<script type="application/ld+json">%s</script>' % json.dumps(b) for b in LT_LD),
+  body=head_block("Life transitions", "Big change takes something out of you, even the good kind.",
+    "Individual therapy for adults in Colorado in the middle of a move, a new job, a new baby, an illness, a separation, or a change nobody else can see from the outside.") + f'''
+<section class="section">
+  <div class="wrap prose">
+    <p>People expect the hard changes to be hard. What catches them off guard is the good ones. The promotion, the wedding, the baby they wanted, the move they chose. Those come with loss too, and it&rsquo;s harder to admit to because you&rsquo;re supposed to be happy.</p>
+    <p>A transition also takes away what you used to steer by. The routine goes. Sometimes the version of you that knew what to do next goes with it.</p>
+    <p>That deserves more than gritting your teeth until it settles.</p>
+
+    <h2>What people bring</h2>
+    <p>A career change, or a job that ended before you were ready. A move, even a short one. A new baby, and the gap between how you expected to feel and how you do. An illness, yours or someone you love. Deciding whether to stay in a relationship. Getting sober, which changes nearly everything at once. Sometimes nothing outward has changed at all, and what&rsquo;s shifted is what you need.</p>
+
+    <h2>How we work with change</h2>
+    <p><a href="chrissie.html">Chrissie Flynn-Weirich</a> starts from strengths. Together you look at what&rsquo;s still working, name what isn&rsquo;t, and set goals that fit your own vision of your best self rather than somebody else&rsquo;s timeline. Mindfulness and compassion run through it, alongside plain problem-solving.</p>
+    <p><a href="shayla.html">Shayla Martinez-O&rsquo;Brien</a>&rsquo;s view is that healing comes from being able to tolerate hard emotion, along with a clearer sense of your own values. A transition tests both. When the old structure is gone, your values are what&rsquo;s left to decide by.</p>
+    <p>Neither of them will tell you how you ought to feel about the change.</p>
+
+    <h2>When it turns out to be more</h2>
+    <p>Sometimes a change stirs up something older. Drinking that was manageable stops being manageable, or the low mood that made sense for a month is still there in month four. If that&rsquo;s where it goes, the same clinicians can follow it into <a href="anxiety-depression.html">anxiety and depression</a>, <a href="trauma-emdr.html">trauma and EMDR</a> or <a href="substance-use.html">substance use</a>, without starting over somewhere new.</p>
+    <p>For mothers, there&rsquo;s also <a href="mamas-golden-hour.html">Mama&rsquo;s Golden Hour</a>, a six-week virtual group that covers fertility, pregnancy, postpartum and every stage of parenting.</p>
+
+    <h2>Practical details</h2>
+    {STD}
+
+    <div class="callout">
+      <p><strong>Who you&rsquo;d see:</strong> Chrissie Flynn-Weirich, LAC, by telehealth, or Shayla Martinez-O&rsquo;Brien, LPC, in person or by telehealth. Transitions can go to either, and sometimes the deciding factor is simply whose availability suits your week. <a href="team.html">Meet the team</a>.</p>
+    </div>
+
+    <h2>Questions about change</h2>
+    <div class="faq">{"".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in LT_FAQS)}</div>
+
+    {reading(["rest-you-have-to-earn"])}
   </div>
 </section>''' + cta())
 
