@@ -270,21 +270,48 @@ service("couples-therapy.html", "Couples Therapy", "Couples &amp; Relationships"
   related=["baby-blues-vs-postpartum-depression"])
 
 # ─────────────────────────────────────────────── MAMA'S GOLDEN HOUR
+# The Event block only goes out while the start date is still ahead. Once a
+# cohort has started, an Event with a past date and an "InStock" offer is
+# stale data, and Search Console flags it. Update content/group.json for the
+# next cohort and the block comes back on the next build.
+import datetime as _dt
+_start = _dt.datetime.fromisoformat(G["startDateISO"])
+UPCOMING = _start > _dt.datetime.now(_start.tzinfo)
+
 group_ld = {"@context":"https://schema.org","@type":"Event",
   "name":"Mama's Golden Hour Therapy Group","eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode",
   "eventStatus":"https://schema.org/EventScheduled","startDate":G["startDateISO"],
   "location":{"@type":"VirtualLocation","url":clean_url("mamas-golden-hour.html")},
   "organizer":{"@type":"MedicalBusiness","@id":BUSINESS_ID,"name":"Golden Hour Wellness Colorado, LLC","url":SITE + "/"},
   "description":"A six-week virtual therapy group for Colorado mothers covering fertility, pregnancy and birth, postpartum and all stages of parenting.",
+  "image":SITE + "/assets/img/mamas-group.jpg",
   "offers":{"@type":"Offer","price":G["priceFull"],"priceCurrency":"USD","availability":"https://schema.org/InStock","url":clean_url("mamas-golden-hour.html")}}
 
+# Questions people ask before joining. Every answer restates something the
+# page or group.json already says; nothing new is claimed about the group.
+MAMA_FAQS = [
+  ("Is this a postpartum support group?",
+   "It covers postpartum, and the stretches either side of it: fertility, pregnancy and birth, and every stage of parenting after. It&rsquo;s a therapy group with two licensed clinicians, so it runs differently from a peer meetup, though hearing from other mothers is a big part of why it helps."),
+  ("Can I use insurance for the group?",
+   f"No. The group is self-pay only: ${G['pricePerSession']} per session, or ${G['priceFull']} for the full six weeks. Insurance does apply to individual therapy, where we&rsquo;re in-network with Aetna, United Healthcare and Cigna."),
+  ("Do I have to talk?",
+   "No. Plenty of people spend the first week listening. The one thing asked of everyone is confidentiality."),
+  ("Can my baby be there?",
+   "Yes. Babies in arms are welcome on screen, and so is breastfeeding, camera on or off."),
+  ("Do I need a diagnosis to join?",
+   "No, and you don&rsquo;t need to feel that things are bad enough, either. Every member has a short consultation first. That&rsquo;s where we work out together whether the group fits."),
+  ("Who can join?",
+   f"{G['openTo']}. The group meets on Zoom, and because our clinicians are licensed in Colorado, you need to be in the state during sessions."),
+]
+
 emit("mamas-golden-hour.html",
-  title="Mama&rsquo;s Golden Hour | Therapy Group for Colorado Moms",
-  desc=f"A six-week virtual therapy group for Colorado mothers, covering fertility, pregnancy, postpartum and parenting. Next cohort begins {G['startDateShort']}.",
+  title="Virtual Postpartum &amp; Moms Therapy Group in Colorado",
+  desc=f"A six-week therapy group on Zoom for Colorado moms: fertility, pregnancy, postpartum and parenting, led by two LPCs. ${G['pricePerSession']} a session. Next cohort {G['startDateShort']}.",
   active="services.html",
   crumbs=[("Services", "services.html"), ("Mama's Golden Hour", "mamas-golden-hour.html")],
   img="assets/img/mamas-group.jpg",
-  extra_head=f'<script type="application/ld+json">{json.dumps(group_ld)}</script>',
+  extra_head=(f'<script type="application/ld+json">{json.dumps(group_ld)}</script>' if UPCOMING else "")
+             + f'<script type="application/ld+json">{json.dumps(faq_ld(MAMA_FAQS))}</script>',
   body=head_block("Group therapy", "Mama&rsquo;s Golden Hour",
     "A six-week virtual therapy group for mothers across Colorado, co-facilitated by Shayla and Ashley.") + f'''
 <section class="section">
@@ -334,6 +361,9 @@ emit("mamas-golden-hour.html",
     <p>A lot of what makes new motherhood hard is the conviction that everyone else is finding it easier. That belief is remarkably resistant to a therapist telling you otherwise, and it tends to dissolve the first time another mother says the thing out loud.</p>
     <p>Groups also normalize the parts that feel unspeakable: ambivalence, resentment, grief for the life before, the specific loneliness of being with a baby all day. Hearing it from someone else does something reassurance can&rsquo;t.</p>
     <p>Some people do the group alongside individual therapy, here or elsewhere. Others do it on its own. Either is fine, and it&rsquo;s worth saying that the group is not a substitute for individual treatment if you&rsquo;re struggling badly.</p>
+
+    <h2>Questions before you join</h2>
+    <div class="faq">{"".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in MAMA_FAQS)}</div>
 
     {reading(["baby-blues-vs-postpartum-depression"], "Before the first session")}
 
