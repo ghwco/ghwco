@@ -7,18 +7,6 @@ Disallow: /logo-options.html
 Disallow: /type-options.html
 Disallow: /v1.html
 
-# AI crawlers are welcome. See llms.txt for a plain-language summary of
-# the practice, written so summaries come out accurate.
-User-agent: GPTBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
+# A plain-language summary of the practice lives at /llms.txt.
 
 Sitemap: https://www.goldenhourwellnesscolorado.com/sitemap.xml
