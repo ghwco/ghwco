@@ -1,4 +1,4 @@
-/* Golden Hour Wellness — shared behaviour (v2, contact, 404) */
+/* Golden Hour Wellness: shared behavior (v2, contact, 404) */
 (function () {
   'use strict';
 
@@ -9,7 +9,7 @@
   var header = document.getElementById('header');
 
   /* --header-h is everything stacked above the hero, not just the header
-     itself — the preview version bar sits above it and would otherwise push
+     itself; the preview version bar sits above it and would otherwise push
      the trust strip below the fold. Measuring the hero's offset from the top
      of the document covers any number of bars without hardcoding them. */
   function measureHeader() {
@@ -52,7 +52,7 @@
 
   /* ---- Thrizer frame sizing -------------------------------------------
      Thrizer emits no resize event and we can't measure across origins, so
-     height is a lookup keyed on the FRAME's measured width — Thrizer's own
+     height is a lookup keyed on the FRAME's measured width; Thrizer's own
      reflow points are 768px and 480px of frame width, which sit close to
      our breakpoints, so keying off the viewport reintroduces a gap.
      BLEED must exceed the ~18px of blank canvas Thrizer pads below its own

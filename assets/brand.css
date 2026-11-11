@@ -1,18 +1,18 @@
 /* ============================================================
-   GOLDEN HOUR WELLNESS — v2 design system
+   GOLDEN HOUR WELLNESS: v2 design system
    Shared by v2.html, contact.html and 404.html.
 
    What changed from v1, and why:
 
-   RADIUS — v1 used 18/28px cards with fully-round pill buttons.
+   RADIUS: v1 used 18/28px cards with fully-round pill buttons.
    At that scale it reads app-like: friendly, but closer to a
    consumer product than a clinical practice. v2 uses a tighter,
    more architectural scale (6/10/14px) with 8px buttons. Still
-   soft — nothing is a hard corner — but it reads tailored rather
-   than bubbly. Warmth now comes from colour, photography and
+   soft (nothing is a hard corner) but it reads tailored rather
+   than bubbly. Warmth now comes from color, photography and
    type, not from corner radius.
 
-   ICONS — v1 put line icons inside gradient-filled rounded
+   ICONS: v1 put line icons inside gradient-filled rounded
    squares. Those tiles were the single most "template" element
    on the page. v2 drops the tile: a 1.25px-stroke mark in clay
    sits directly on the card above a hairline rule. Lighter, and
@@ -35,7 +35,7 @@
   --lilac:     #A995B4;
   --lilac-mist:#EFE9F2;
 
-  /* neutrals — slightly cooler + less yellow than v1 */
+  /* neutrals; slightly cooler + less yellow than v1 */
   --cream:  #FBF7F2;
   --sand:   #F4EBE1;
   --shell:  #FFFDFB;
@@ -206,7 +206,7 @@ p{margin:0 0 1.15em}
   /* Sit 1px INTO the footer rather than exactly on its top edge. At
      fractional scroll offsets the browser was rounding the boundary and
      letting a hairline of the orange CTA gradient show through between the
-     ridge and the footer — the thin orange line you saw while scrolling. */
+     ridge and the footer; the thin orange line you saw while scrolling. */
   bottom:calc(100% - 1px);
   height:clamp(48px, 6vw, 88px); line-height:0; pointer-events:none;
 }
@@ -214,12 +214,12 @@ p{margin:0 0 1.15em}
 
 /* Live golden-hour readout. The practice is named for it, so showing today's
    actual window in Colorado is a small, factual piece of delight that changes
-   every day. Computed locally (NOAA solar equations) — no API, no key. */
+   every day. Computed locally (NOAA solar equations); no API, no key. */
 .goldenhour{
   display:flex; align-items:center; justify-content:center; gap:.7rem;
   flex-wrap:wrap; text-align:center;
   border-top:1px solid rgba(255,255,255,.1);
-  /* symmetric padding so the line sits optically centred between its own
+  /* symmetric padding so the line sits optically centered between its own
      top rule and the footer bar's rule below it */
   padding:1.1rem 0; margin:1.5rem 0 0;
   font-size:.86rem; color:rgba(255,255,255,.62);
@@ -248,7 +248,7 @@ p{margin:0 0 1.15em}
   display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; font-size:.79rem; color:rgba(255,255,255,.5);
 }
 /* Privacy / Terms / GFE sit inline in a sentence, so they render at ~15px.
-   A transparent centred overlay grows the touch target to 36px without
+   A transparent centered overlay grows the touch target to 36px without
    changing a single visible pixel or nudging the baseline. */
 .footer__bar a{position:relative}
 .footer__bar a::after{content:""; position:absolute; left:-2px; right:-2px; top:50%; height:36px; transform:translateY(-50%)}

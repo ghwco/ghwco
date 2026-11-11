@@ -6,7 +6,7 @@ index.html is hand-tuned and deliberately NOT generated, so it can't be
 rebuilt from a template the way the other pages are. Instead every editable
 string carries a data-cms="section.field" marker, and this script rewrites
 the text inside those elements in place. Markup, classes and attributes are
-untouched — only the text between the tags changes.
+untouched; only the text between the tags changes.
 
 That is what makes it safe to hand the homepage to a CMS: the worst a bad
 edit can do is produce awkward wording, never a broken layout.
@@ -23,7 +23,7 @@ DATA = "content/home.json"
 
 # hero.headline is the one rich field. Authors write *golden hour* and get
 # the gold italic; everything else is escaped as-is. Keeping the CMS syntax
-# this small is deliberate — it can't emit markup the design didn't plan for.
+# this small is deliberate: it can't emit markup the design didn't plan for.
 RICH = {"hero.headline"}
 
 

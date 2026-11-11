@@ -2,8 +2,8 @@
 """
 Fails the build if _redirects contains a rule that loops on Cloudflare Pages.
 
-This exists because I have now written the same broken rule twice — once for
-/services and once for /blog — despite a comment in _redirects saying not to.
+This exists because I have now written the same broken rule twice, once for
+/services and once for /blog, despite a comment in _redirects saying not to.
 A comment is a suggestion; an exit code is a rule.
 
 Cloudflare Pages serves clean URLs: it answers /blog with blog.html and
