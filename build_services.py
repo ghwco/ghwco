@@ -51,6 +51,7 @@ emit("services.html",
       <a class="card" href="anxiety-depression.html"><h3>Anxiety &amp; Depression</h3><p>Solution-oriented, CBT-informed work, plus practical tools you can actually use.</p><span class="more">Learn more &rarr;</span></a>
       <a class="card" href="substance-use.html"><h3>Substance Use &amp; Recovery</h3><p>Licensed addiction counseling for substance use disorders, or feeling stuck and disconnected.</p><span class="more">Learn more &rarr;</span></a>
       <a class="card" href="couples-therapy.html"><h3>Couples &amp; Relationships</h3><p>Family stress, work stress, and the big pivots that change how you relate to each other.</p><span class="more">Learn more &rarr;</span></a>
+      <a class="card" href="life-transitions-therapy.html"><h3>Life Transitions</h3><p>A move, a new job, a new baby, an illness or a separation, and whatever it shakes loose.</p><span class="more">Learn more &rarr;</span></a>
       <a class="card" href="mamas-golden-hour.html"><h3>Mama&rsquo;s Golden Hour</h3><p>A six-week virtual therapy group for Colorado mothers. Next cohort begins {G["startDateShort"]}.</p><span class="more">Learn more &rarr;</span></a>
     </div>
     <div class="callout" style="margin-top:2.5rem; max-width:44rem">
@@ -62,7 +63,7 @@ emit("services.html",
 <section class="section" style="background:var(--sand)">
   <div class="wrap prose">
     <h2>Not sure which one you need?</h2>
-    <p>Most people don&rsquo;t arrive with a category in mind, and you don&rsquo;t need one. The pages above are how we organize our training, not a menu you have to order from. In practice these overlap constantly. Trauma sits underneath a lot of anxiety, substance use often started as a way to manage something else, and both show up in relationships.</p>
+    <p>Most people don&rsquo;t arrive with a category in mind, and you don&rsquo;t need one. The pages above are how we organize our training, not a menu you have to order from. In practice these overlap constantly. Trauma sits underneath a lot of anxiety, substance use often started as a way to manage something else, and both show up in relationships. When trauma and substance use are tangled together, <a href="trauma-and-addiction.html">we treat them as one picture</a>.</p>
     <p>The free consultation exists to sort this out. It takes about fifteen minutes, there&rsquo;s no cost and no obligation, and by the end you&rsquo;ll know whether this practice fits and which clinician makes sense. If we&rsquo;re not the right place, we&rsquo;ll tell you and point you somewhere better.</p>
 
     <h2>What a first session is like</h2>
@@ -146,7 +147,8 @@ service("trauma-emdr.html", "EMDR Therapy", "Trauma &amp; EMDR Therapy",
   "Eye Movement Desensitization and Reprocessing alongside other trauma-focused approaches, in person or via telehealth anywhere in Colorado.",
   ["Trauma doesn&rsquo;t only live in memory. It shows up in how your body reacts, how you sleep, what you avoid, and how quickly you move from calm to overwhelmed. EMDR works with that directly rather than asking you to talk your way through it.",
    "The goal isn&rsquo;t to erase what happened. It&rsquo;s to change your relationship to it, so the memory stops setting the terms of your present. Most people find they can hold more, react less, and recognize themselves again.",
-   "Shayla uses EMDR among other trauma-focused approaches, chosen to fit what you bring rather than applied from a template. You&rsquo;ll never be pushed to revisit something before you&rsquo;re ready."],
+   "Shayla uses EMDR among other trauma-focused approaches, chosen to fit what you bring rather than applied from a template. You&rsquo;ll never be pushed to revisit something before you&rsquo;re ready.",
+   "If alcohol or another substance has become part of how you cope, that can be worked on here too, alongside the trauma rather than after it. More on <a href=\"trauma-and-addiction.html\">trauma and addiction together</a>."],
   ["Something from your past still shapes how you react today",
    "You feel activated or shut down without always knowing why",
    "Talk therapy has helped, but only to a point",
@@ -212,7 +214,7 @@ service("substance-use.html", "Addiction Counseling", "Substance Use &amp; Recov
   "Licensed addiction counseling for people living with substance use disorders, or anyone feeling stuck and disconnected from themselves.",
   ["You don&rsquo;t need a label or a rock-bottom story to start here. Plenty of people arrive simply knowing something has taken up more room than they want it to.",
    "The work is strengths-based. We&rsquo;ll identify what&rsquo;s already working, name honestly what isn&rsquo;t, and set goals that match your own vision of your best self rather than someone else&rsquo;s.",
-   "Chrissie holds a Colorado addiction counseling license, so substance use is treated here as core clinical work rather than something we refer out. Shayla brings the trauma side, which so often sits underneath it."],
+   "Chrissie holds a Colorado addiction counseling license, so substance use is treated here as core clinical work rather than something we refer out. Shayla brings the trauma side, which so often sits underneath it. When both are in play, <a href=\"trauma-and-addiction.html\">they&rsquo;re treated as one picture</a>."],
   ["Substance use has become larger than you intended",
    "You feel stuck, or disconnected from yourself and others",
    "You&rsquo;ve tried to change on your own and it hasn&rsquo;t held",
@@ -245,7 +247,8 @@ service("couples-therapy.html", "Couples Therapy", "Couples &amp; Relationships"
   "Family stress, work stress, and the big pivots. Getting through change with more clarity and a stronger sense of purpose.",
   ["Most couples don&rsquo;t arrive because of one argument. They arrive because a pattern has set in, and the same conversation keeps happening in slightly different clothes.",
    "Sessions focus on what each of you is actually asking for underneath the disagreement, and on building a way to say it that the other person can hear.",
-   "This is also useful during transitions that aren&rsquo;t anyone&rsquo;s fault. A new baby, a career change, a move, an illness, or a shift in what you each need."],
+   "This is also useful during transitions that aren&rsquo;t anyone&rsquo;s fault. A new baby, a career change, a move, an illness, or a shift in what you each need.",
+   "If the change is landing mostly on one of you, <a href=\"life-transitions-therapy.html\">individual therapy for life transitions</a> may be the better place to start."],
   ["The same argument keeps recurring",
    "A transition has changed how you relate to each other",
    "One or both of you has stopped raising things",
@@ -478,7 +481,9 @@ emit("telehealth-therapy-colorado.html",
       <tr><th><a href="trauma-emdr.html">Trauma &amp; EMDR</a></th><td>The left-right cue runs on screen, or you tap it yourself.</td></tr>
       <tr><th><a href="anxiety-depression.html">Anxiety &amp; depression</a></th><td>Translates well. The practice between sessions happens in your own life anyway.</td></tr>
       <tr><th><a href="substance-use.html">Substance use</a></th><td>Chrissie&rsquo;s sessions are all telehealth.</td></tr>
+      <tr><th><a href="trauma-and-addiction.html">Trauma &amp; addiction</a></th><td>Both sides of the work run by video.</td></tr>
       <tr><th><a href="couples-therapy.html">Couples</a></th><td>Works best from one room, on one screen.</td></tr>
+      <tr><th><a href="life-transitions-therapy.html">Life transitions</a></th><td>Chrissie is telehealth only; Shayla sees people either way.</td></tr>
       <tr><th><a href="mamas-golden-hour.html">Mama&rsquo;s Golden Hour</a></th><td>Virtual only, by Zoom.</td></tr>
     </table>
 
