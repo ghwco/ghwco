@@ -230,7 +230,7 @@ INS_FAQS = [
 ]
 
 emit("insurance.html",
-  title=titled("Therapy Insurance: Aetna, Cigna &amp; UHC"),
+  title=titled("Therapists Taking Aetna, Cigna &amp; UHC in Colorado"),
   desc="In-network with Aetna, Cigna and UHC for individual therapy in Colorado. What you'd pay, how to check out-of-network benefits, and self-pay options.",
   crumbs=[("Insurance & Rates", "insurance.html")],
   extra_head=f'<script type="application/ld+json">{json.dumps(faq_schema(INS_FAQS))}</script>',

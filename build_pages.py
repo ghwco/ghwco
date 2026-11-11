@@ -282,11 +282,11 @@ BRAND = "Golden Hour Wellness Colorado"
 BRAND_SHORT = "Golden Hour Wellness"
 
 
-def titled(t, limit=60):
+def titled(t, limit=59):
     """Append the brand only while the title still fits in a search result.
 
-    Google cuts titles around 60 characters. "| Golden Hour Wellness Colorado"
-    is 31 of them, which is why several post titles were being truncated
+    Google cuts titles around 60 characters, so the limit sits just under
+    that. "| Golden Hour Wellness Colorado" is 31 of them, which is why several post titles were being truncated
     mid-sentence. Try the full brand, then the short one, then no brand at all
     (Google appends the site name itself anyway). A title that already says
     Colorado skips the full brand so the state doesn't appear twice."""
