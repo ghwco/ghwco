@@ -1,4 +1,4 @@
-# Launch setup — state of play
+# Launch setup: state of play
 
 Live preview: **https://ghwco.pages.dev**
 Repo: **github.com/ghwco/ghwco** (Shayla's account, Chad as collaborator)
@@ -34,17 +34,17 @@ generated and committed, all four site URLs registered including localhost.
 | Collection | Controls |
 |---|---|
 | Homepage | Hero headline and intro, the three points under it, section headlines |
-| Mama's Golden Hour — cohort | Dates, time, price, capacity, *enrolling* toggle |
+| Mama's Golden Hour cohort | Dates, time, price, capacity, *enrolling* toggle |
 | Practice details | Phone, email, insurers, footer blurb, social links |
 | FAQ | The questions, reorderable, add/remove |
-| **Journal** | Blog posts — create, edit, and a real Published on/off switch |
+| **Journal** | Blog posts: create, edit, and a real Published on/off switch |
 
 Tina edits JSON in `/content`, never the HTML. It commits to GitHub, which
 triggers a Cloudflare build, which re-runs the generators. A bad edit can
 produce awkward wording; it cannot break layout, schema or accessibility.
 That boundary is deliberate.
 
-The cohort fields are the ones that will actually get used — they change every
+The cohort fields are the ones that will actually get used. They change every
 term, and the `enrolling` toggle swaps in a "this cohort is full" notice
 without anyone touching prose.
 
@@ -54,50 +54,26 @@ without anyone touching prose.
 
 Deployments → Retry deployment. This is the **first** run that executes
 `tinacms build`, so it's the one that replaces the placeholder at `/admin`
-with the real editor. Watch the log rather than assuming — `python3` on
+with the real editor. Watch the log rather than assuming. `python3` on
 Cloudflare's image and `tinacms build` are both unproven there.
 
 Then add Shayla as a user in Tina so she can sign in.
 
 ---
 
-## EmailJS — built, currently routed to Chad for testing
+## Contact form: Resend (EmailJS retired November 2026)
 
-Both templates are built and live in the dashboard:
+The form posts to `/api/contact` (`functions/api/contact.js`) and sends
+through Resend. Env vars, the health check and key rotation are in the
+README under "Contact form (Resend)".
 
-| Template | ID | Goes to |
-|---|---|---|
-| Golden Hour - New Inquiry | `template_ql76otu` | **chad.m.moravec@gmail.com** (temporary) |
-| Golden Hour - Auto Reply | `template_tkcx2rd` | `{{from_email}}` — the inquirer |
-
-Service `service_0z3erja` (Gmail), public key `4kZZJo5E8VJGKzGGg`. All four IDs
-are already wired into `contact.html`.
-
-### Handing the inbox over to Shayla
-
-Two fields in the EmailJS dashboard. Nothing in the codebase changes.
-
-1. **Template `template_ql76otu`** → *To Email* →
-   `chad.m.moravec@gmail.com` → `goldenhourwellco@gmail.com`
-2. **Template `template_tkcx2rd`** → *Reply To* →
-   `ghwco2026@gmail.com` → `goldenhourwellco@gmail.com`
-
-Note the account itself is registered to `ghwco2026@gmail.com` while the site
-publishes `goldenhourwellco@gmail.com`. Both are hers; just make sure the one
-she reads daily is the one in *To Email*, because that is where a distressed
-first-time inquiry lands.
-
-### Lock it down before handover
-
-EmailJS → Account → Security → add `goldenhourwellnesscolorado.com` and
-`ghwco.pages.dev` to allowed origins, and enable their CAPTCHA. The public key
-is visible in page source by design; the domain allowlist is what stops it
-becoming a spam relay. Free tier is 200 sends/month — fine for a practice this
-size, but worth watching if it ever gets scraped.
+The old EmailJS service (`service_0z3erja`, templates `template_ql76otu` and
+`template_tkcx2rd`) is no longer called by the site. Leave it in place until
+the Resend version has delivered a real inquiry, then it can be disabled.
 
 ---
 
-## Whenever the Tina schema changes — READ THIS
+## Whenever the Tina schema changes: READ THIS
 
 Editing `tina/config.ts` (adding a collection, adding a field) puts the local
 schema out of step with what TinaCloud has indexed. The Cloudflare build then
@@ -114,7 +90,7 @@ cd "$HOME/Desktop/Projects/Clients/golden-hour-wellness-WORKING-SOURCE"
 npx tinacms dev      # wait for "Dev Server is active", then Ctrl+C
 ```
 
-That regenerates `tina-lock.json`. Commit and push it — TinaCloud re-indexes
+That regenerates `tina-lock.json`. Commit and push it. TinaCloud re-indexes
 from the push, and the next build passes.
 
 **Content edits never need this.** Only schema changes do. Anything Shayla
@@ -127,13 +103,13 @@ never takes the site down.
 
 **The Gmail/HIPAA gap.** The form routes to consumer Gmail, which has no BAA.
 The form collects contact details only and the notice above it asks people to
-keep health detail out — that's mitigation, not compliance. People sometimes
+keep health detail out. That's mitigation, not compliance. People sometimes
 volunteer symptoms anyway. The real fix is Google Workspace with a signed BAA
-(~$6/user/month) and repointing the EmailJS service at it. Worth raising with
+(~$6/user/month) and pointing `TO_EMAIL` at that inbox. Worth raising with
 Shayla as a decision she makes knowingly.
 
 **Shayla should read the new copy before it's indexed.** I wrote roughly
-1,800 new words describing how the practice works clinically — the "what the
+1,800 new words describing how the practice works clinically: the "what the
 work looks like" sections and the per-service Q&As. It asserts things about
 her methods that only she can confirm.
 
@@ -143,10 +119,10 @@ that account. Needs downloading and moving into `assets/img/`.
 **DNS / custom domain.** Not done, deliberately. Adding
 `goldenhourwellnesscolorado.com` in Cloudflare and repointing nameservers is
 the moment the old Squarespace site goes dark, so it waits until Shayla has
-signed off. Chad and Claude walk through it together.
+signed off. Chad walks through it with her.
 
 **`logo-options.html` / `type-options.html`** are still in the repo. Not
-linked, `noindex`, and disallowed in robots.txt — but publicly reachable if
+linked, `noindex`, and disallowed in robots.txt, but publicly reachable if
 guessed. Delete them whenever.
 
 ---
