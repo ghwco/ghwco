@@ -4,8 +4,30 @@
   "phoneHref": "tel:+13037369822",
   "email": "goldenhourwellco@gmail.com",
   "acceptingNewClients": true,
-  "insurers": ["Aetna", "United Healthcare", "Cigna"],
+  "insurers": [
+    "Aetna",
+    "United Healthcare",
+    "Cigna"
+  ],
   "instagram": "https://www.instagram.com/goldenhourwellnesscolorado",
   "psychologyToday": "https://www.psychologytoday.com/profile/1406337",
-  "footerBlurb": "Therapist-owned counseling for trauma, EMDR and addiction. Serving clients across Colorado."
+  "footerBlurb": "Therapist-owned counseling for trauma, EMDR and addiction. Serving clients across Colorado.",
+  "address": {
+    "street": "5460 Ward Rd. Ste. 100",
+    "city": "Arvada",
+    "state": "CO",
+    "zip": "80002"
+  },
+  "selfPayRate": "120",
+  "clinicianInsurers": {
+    "Shayla Martinez-O'Brien": [
+      "Aetna",
+      "United Healthcare",
+      "Cigna"
+    ],
+    "Chrissie Flynn-Weirich": [
+      "Aetna",
+      "United Healthcare"
+    ]
+  }
 }

@@ -236,6 +236,8 @@ service("substance-use.html", "Addiction Counseling", "Substance Use &amp; Recov
     "You keep your appointment. A return to use is common in recovery and it tells us something about what wasn&rsquo;t yet in place. It isn&rsquo;t grounds for being discharged or lectured."),
    ("Is this confidential?",
     "Yes, with the same legal limits as any therapy. Federal rules around substance use records are in fact stricter than general health privacy. We&rsquo;ll go through exactly what that means at intake."),
+   ("Does insurance cover addiction counseling?",
+    "Chrissie is in network with Aetna and United Healthcare. Shayla is in network with those two and Cigna. Self-pay is $120 per 50-minute session, and other plans may reimburse part of it out of network. <a href=\"insurance.html\">Insurance and rates</a> has the details."),
    ("Do you provide detox or medication?",
     "No. We&rsquo;re outpatient counselors, not a medical facility. If you need medically supervised withdrawal or medication for opioid or alcohol use, we&rsquo;ll help you find it and can work alongside that treatment."),
   ],
@@ -307,7 +309,7 @@ service("trauma-and-addiction.html", "Trauma and Addiction Therapy", "Trauma &am
    ("Is this a dual diagnosis program?",
     "No. We&rsquo;re outpatient counselors, not a treatment center or a medical facility, so there&rsquo;s no detox and no prescribing. If you need medically supervised withdrawal or medication for opioid or alcohol use, we&rsquo;ll help you find it and can work alongside that care."),
    ("Does insurance cover it?",
-    "Individual therapy is in-network with Aetna, United Healthcare and Cigna. With another plan, you can check your out-of-network benefits or ask for a written Good Faith Estimate. <a href=\"insurance.html\">Insurance and rates</a> has the details."),
+    "Individual therapy is in-network with Aetna, United Healthcare and Cigna. Chrissie is in network with Aetna and United Healthcare only. With another plan, you can check your out-of-network benefits or ask for a written Good Faith Estimate. <a href=\"insurance.html\">Insurance and rates</a> has the details."),
    ("Is what I say about substance use kept private?",
     "Yes, within the same legal limits as any therapy. Federal rules for substance use treatment records are stricter than general health privacy rules, and we go through what that means at intake."),
   ],
@@ -337,6 +339,18 @@ group_ld = {"@context":"https://schema.org","@type":"Event",
   "image":SITE + "/assets/img/mamas-group.jpg",
   "offers":{"@type":"Offer","price":G["priceFull"],"priceCurrency":"USD","availability":"https://schema.org/InStock","url":clean_url("mamas-golden-hour.html")}}
 
+_community = _dt.date.fromisoformat(G["communityDateISO"])
+COMMUNITY_UPCOMING = _community >= _dt.date.today()
+community_ld = {"@context":"https://schema.org","@type":"Event",
+  "name":"Mama's Golden Hour: Free Community Session","eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode",
+  "eventStatus":"https://schema.org/EventScheduled","startDate":G["communityDateISO"],
+  "location":{"@type":"VirtualLocation","url":clean_url("mamas-golden-hour.html")},
+  "organizer":{"@type":"MedicalBusiness","@id":BUSINESS_ID,"name":"Golden Hour Wellness Colorado, LLC","url":SITE + "/"},
+  "description":"A single free 90-minute virtual group session for Colorado mothers, ahead of the next six-week Mama's Golden Hour cohort.",
+  "image":SITE + "/assets/img/mamas-group.jpg",
+  "isAccessibleForFree":True,
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock","url":clean_url("mamas-golden-hour.html")}}
+
 # Questions people ask before joining. Every answer restates something the
 # page or group.json already says; nothing new is claimed about the group.
 MAMA_FAQS = [
@@ -356,11 +370,12 @@ MAMA_FAQS = [
 
 emit("mamas-golden-hour.html",
   title="Virtual Postpartum &amp; Moms Therapy Group in Colorado",
-  desc=f"A six-week therapy group on Zoom for Colorado moms: fertility, pregnancy, postpartum and parenting, led by two LPCs. ${G['pricePerSession']} a session. Next cohort {G['startDateShort']}.",
+  desc=f"A six-week therapy group on Zoom for Colorado moms: fertility, pregnancy, postpartum and parenting, led by two LPCs. ${G['pricePerSession']} a session. Next cohort {G['startDateShort']}. Free community session {G['communityDateShort']}.",
   active="services.html",
   crumbs=[("Services", "services.html"), ("Mama's Golden Hour", "mamas-golden-hour.html")],
   img="assets/img/mamas-group.jpg",
   extra_head=(f'<script type="application/ld+json">{json.dumps(group_ld)}</script>' if UPCOMING else "")
+             + (f'<script type="application/ld+json">{json.dumps(community_ld)}</script>' if COMMUNITY_UPCOMING else "")
              + f'<script type="application/ld+json">{json.dumps(faq_ld(MAMA_FAQS))}</script>',
   body=head_block("Group therapy", "Mama&rsquo;s Golden Hour",
     "A six-week virtual therapy group for mothers across Colorado, co-facilitated by Shayla and Ashley.") + f'''
@@ -379,6 +394,17 @@ emit("mamas-golden-hour.html",
       <tr><th>Cost</th><td>{G["costLine"]}</td></tr>
       <tr><th>Open to</th><td>{G["openTo"]}</td></tr>
     </table>
+
+    <h2>Free community session</h2>
+    <p>Before the next cohort starts, we&rsquo;re holding a single free community group session on <strong>{G["communityDateLong"]}</strong>. It&rsquo;s one {G["communityLength"].replace(" minutes", "-minute")} session on Zoom, in the morning, with the exact time to come, and it&rsquo;s open to mothers anywhere in Colorado. If you&rsquo;ve wondered whether a group would suit you, this is the low-stakes way to find out.</p>
+    <table>
+      <tr><th>When</th><td>{G["communityDateLong"]}</td></tr>
+      <tr><th>Time</th><td>{G["communityTime"]}</td></tr>
+      <tr><th>Length</th><td>{G["communityLength"]}</td></tr>
+      <tr><th>Where</th><td>{G["where"]}</td></tr>
+      <tr><th>Cost</th><td>{G["communityCost"]}</td></tr>
+    </table>
+    <p>Spots are limited. Call or text <a href="tel:+13037369822">(303)&nbsp;736-9822</a>, or <a href="contact.html">send a message</a>, and say you&rsquo;re asking about the December session.</p>
 
     <div class="callout warn">
       <p><strong>Insurance is not accepted for the group.</strong> Group sessions are self-pay only. Insurance does apply to individual therapy, where we&rsquo;re in-network with Aetna, United Healthcare and Cigna.</p>
@@ -432,7 +458,7 @@ emit("mamas-golden-hour.html",
 <section class="section" style="background:var(--sand); text-align:center">
   <div class="wrap">
     <h2>Join the {G["startDateLong"].split(",")[1].split()[0]} cohort</h2>
-    <p class="lede" style="margin-inline:auto">Six weeks, starting {G["startDateLong"]} at 6pm MT. Consultation first, always.</p>
+    <p class="lede" style="margin-inline:auto">Six weeks, starting {G["startDateLong"]} at 6pm MT. Or try the free community session on {G["communityDateShort"]} first. Consultation first, always.</p>
     <div style="display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; margin-top:1.75rem">
       <a class="btn btn-primary" href="index.html#book">Book a consultation</a>
       <a class="btn btn-outline" href="tel:+13037369822">Call or text (303) 736-9822</a>
@@ -488,7 +514,7 @@ emit("telehealth-therapy-colorado.html",
     </table>
 
     <h2>Insurance and cost</h2>
-    <p>We&rsquo;re in-network with Aetna, United Healthcare and Cigna for individual therapy. <a href="insurance.html">Insurance and rates</a> covers what you&rsquo;d pay, how to check out-of-network benefits, and the self-pay route.</p>
+    <p>We&rsquo;re in-network with Aetna, United Healthcare and Cigna for individual therapy (Chrissie with Aetna and United Healthcare only). <a href="insurance.html">Insurance and rates</a> covers what you&rsquo;d pay, how to check out-of-network benefits, and the self-pay route.</p>
 
     <div class="callout">
       <p><strong>Prefer to come in?</strong> In-person sessions are available too, and you can switch between the two as your weeks change. Mention it on the free consultation.</p>

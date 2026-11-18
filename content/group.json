@@ -1,8 +1,8 @@
 {
   "name": "Mama's Golden Hour",
-  "startDateISO": "2026-10-07T18:00:00-06:00",
-  "startDateLong": "Wednesday, October 7, 2026",
-  "startDateShort": "October 7",
+  "startDateISO": "2027-01-13T18:00:00-07:00",
+  "startDateLong": "Wednesday, January 13, 2027",
+  "startDateShort": "January 13",
   "time": "6:00pm Mountain Time",
   "runsFor": "6 weeks",
   "where": "Virtually, via Zoom",
@@ -12,5 +12,11 @@
   "costLine": "$25 per session, or $150 for the full six weeks",
   "openTo": "Mothers anywhere in Colorado",
   "capacity": "8",
-  "enrolling": true
+  "enrolling": true,
+  "communityDateISO": "2026-12-12",
+  "communityDateLong": "Saturday, December 12, 2026",
+  "communityDateShort": "December 12",
+  "communityTime": "Morning, exact time to be announced",
+  "communityLength": "90 minutes",
+  "communityCost": "Free"
 }

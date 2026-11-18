@@ -43,10 +43,12 @@ emit("faq.html",
     <p>We&rsquo;re in-network with <strong>Aetna</strong>, <strong>United Healthcare</strong>
     and <strong>Cigna</strong> for individual therapy. With one of those plans you pay
     whatever your policy sets as your copay or coinsurance, and we&rsquo;ll help you
-    check that figure before your first session rather than after it.</p>
+    check that figure before your first session rather than after it. One detail worth knowing: Chrissie is in network with Aetna and United Healthcare but not Cigna.</p>
 
     <table>
       <tr><th>In-network plans</th><td>Aetna, United Healthcare, Cigna</td></tr>
+      <tr><th>Chrissie Flynn-Weirich, LAC</th><td>In network with Aetna and United Healthcare only. Cigna members can see her self-pay or out of network.</td></tr>
+      <tr><th>Self-pay rate</th><td>$120 per 50-minute individual session</td></tr>
       <tr><th>Session length</th><td>50 minutes, individual</td></tr>
       <tr><th>First step</th><td>A free 15-minute consultation</td></tr>
       <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only: $25 per session, or $150 for six weeks</td></tr>
@@ -198,7 +200,7 @@ emit("good-faith-estimate.html",
     <h2>Current self-pay rates</h2>
     <table>
       <tr><th>Service</th><th>Rate</th></tr>
-      <tr><td>Individual therapy, 50 minutes</td><td>Provided in your written estimate</td></tr>
+      <tr><td>Individual therapy, 50 minutes</td><td>$120</td></tr>
       <tr><td>Mama&rsquo;s Golden Hour group</td><td>$25 per session, or $150 for six weeks</td></tr>
       <tr><td>Initial consultation</td><td>Free, 15 minutes</td></tr>
     </table>
@@ -220,7 +222,7 @@ emit("good-faith-estimate.html",
 G = json.load(io.open("content/group.json", encoding="utf-8"))
 INS_FAQS = [
   ("Will you check my coverage before my first session?",
-   "Yes. If you have Aetna, United Healthcare or Cigna, we&rsquo;ll help you find out what your plan sets as your copay or coinsurance before you start, not after the first bill."),
+   "Yes. If you have Aetna, United Healthcare or Cigna, we&rsquo;ll help you find out what your plan sets as your copay or coinsurance before you start, not after the first bill. Note that Chrissie Flynn-Weirich is in network with Aetna and United Healthcare only, so Cigna members working with her would be self-pay or out of network."),
   ("Is couples therapy covered by insurance?",
    "Often not, or only under certain conditions, because insurers generally require an individual diagnosis. We&rsquo;ll check your plan and give you a written estimate before you start."),
   ("Can I use insurance for Mama&rsquo;s Golden Hour?",
@@ -245,6 +247,8 @@ emit("insurance.html",
     <table>
       <tr><th>In-network plans</th><td>Aetna, United Healthcare, Cigna</td></tr>
       <tr><th>Covers</th><td>Individual therapy</td></tr>
+      <tr><th>Chrissie Flynn-Weirich, LAC</th><td>In network with Aetna and United Healthcare only. Cigna members can see her self-pay or out of network.</td></tr>
+      <tr><th>Self-pay rate</th><td>$120 per 50-minute individual session</td></tr>
       <tr><th>Couples therapy</th><td>Depends on the plan, and often not covered</td></tr>
       <tr><th>Mama&rsquo;s Golden Hour</th><td>Self-pay only</td></tr>
       <tr><th>First step</th><td>A free 15-minute consultation</td></tr>
@@ -254,7 +258,7 @@ emit("insurance.html",
     <p>Plenty of plans pay back a real share of out-of-network therapy, and most people have never checked what theirs does. The <a href="index.html#benefits">benefits checker on our homepage</a> takes your insurer and member ID and tells you, in about a minute, what you&rsquo;d likely get back.</p>
 
     <h2>Paying for yourself</h2>
-    <p>If you&rsquo;re uninsured or choosing not to use insurance, the federal No Surprises Act gives you the right to a written <a href="good-faith-estimate.html">Good Faith Estimate</a> before you begin. Ask for one any time. If you&rsquo;re self-pay we send it before your first session anyway.</p>
+    <p>If you&rsquo;re uninsured or choosing not to use insurance, the federal No Surprises Act gives you the right to a written <a href="good-faith-estimate.html">Good Faith Estimate</a> before you begin. Ask for one any time. If you&rsquo;re self-pay we send it before your first session anyway. Our self-pay rate for individual therapy is $120 per 50-minute session.</p>
 
     <h2>Questions people ask about cost</h2>
     <div class="faq">{"".join(f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>' for q, a in INS_FAQS)}</div>
