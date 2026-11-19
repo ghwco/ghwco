@@ -107,10 +107,12 @@ def service(slug, name, title, desc, lede, paras, good_fit, practical, who,
     qa = ('<h2>Common questions</h2><div class="faq">' + "".join(
           f'<details><summary>{q}</summary><div class="a"><p>{a}</p></div></details>'
           for q, a in faqs) + "</div>") if faqs else ""
+    paras_html = "".join(f"<p>{p}</p>" for p in paras)
+    extra_html = ("\n\n    " + extra) if extra else ""
     body = head_block("Services", h1 or title, lede) + f'''
 <section class="section">
   <div class="wrap prose">
-    {"".join(f"<p>{p}</p>" for p in paras)}{("\n\n    " + extra) if extra else ""}
+    {paras_html}{extra_html}
 
     <h2>This may be a good fit if</h2>
     <ul>{fit}</ul>
