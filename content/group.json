@@ -13,10 +13,10 @@
   "openTo": "Mothers anywhere in Colorado",
   "capacity": "8",
   "enrolling": true,
-  "communityDateISO": "2026-12-12",
+  "communityDateISO": "2026-12-12T09:00:00-07:00",
   "communityDateLong": "Saturday, December 12, 2026",
   "communityDateShort": "December 12",
-  "communityTime": "Morning, exact time to be announced",
+  "communityTime": "9:00 to 10:30 AM Mountain",
   "communityLength": "90 minutes",
   "communityCost": "Free"
 }

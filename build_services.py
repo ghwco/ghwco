@@ -339,11 +339,11 @@ group_ld = {"@context":"https://schema.org","@type":"Event",
   "image":SITE + "/assets/img/mamas-group.jpg",
   "offers":{"@type":"Offer","price":G["priceFull"],"priceCurrency":"USD","availability":"https://schema.org/InStock","url":clean_url("mamas-golden-hour.html")}}
 
-_community = _dt.date.fromisoformat(G["communityDateISO"])
+_community = _dt.date.fromisoformat(G["communityDateISO"][:10])
 COMMUNITY_UPCOMING = _community >= _dt.date.today()
 community_ld = {"@context":"https://schema.org","@type":"Event",
   "name":"Mama's Golden Hour: Free Community Session","eventAttendanceMode":"https://schema.org/OnlineEventAttendanceMode",
-  "eventStatus":"https://schema.org/EventScheduled","startDate":G["communityDateISO"],
+  "eventStatus":"https://schema.org/EventScheduled","startDate":G["communityDateISO"],"endDate":"2026-12-12T10:30:00-07:00",
   "location":{"@type":"VirtualLocation","url":clean_url("mamas-golden-hour.html")},
   "organizer":{"@type":"MedicalBusiness","@id":BUSINESS_ID,"name":"Golden Hour Wellness Colorado, LLC","url":SITE + "/"},
   "description":"A single free 90-minute virtual group session for Colorado mothers, ahead of the next six-week Mama's Golden Hour cohort.",
@@ -396,7 +396,7 @@ emit("mamas-golden-hour.html",
     </table>
 
     <h2>Free community session</h2>
-    <p>Before the next cohort starts, we&rsquo;re holding a single free community group session on <strong>{G["communityDateLong"]}</strong>. It&rsquo;s one {G["communityLength"].replace(" minutes", "-minute")} session on Zoom, in the morning, with the exact time to come, and it&rsquo;s open to mothers anywhere in Colorado. If you&rsquo;ve wondered whether a group would suit you, this is the low-stakes way to find out.</p>
+    <p>Before the next cohort starts, we&rsquo;re holding a single free community group session on <strong>{G["communityDateLong"]}</strong>. It&rsquo;s one {G["communityLength"].replace(" minutes", "-minute")} session on Zoom, 9:00 to 10:30 AM, and it&rsquo;s open to mothers anywhere in Colorado. If you&rsquo;ve wondered whether a group would suit you, this is the low-stakes way to find out.</p>
     <table>
       <tr><th>When</th><td>{G["communityDateLong"]}</td></tr>
       <tr><th>Time</th><td>{G["communityTime"]}</td></tr>
